@@ -160,11 +160,17 @@
         <groupId>com.heroku.sdk</groupId>
         <artifactId>heroku-maven-plugin</artifactId>
         <version>${plugin-heroku.version}</version>
-        <configuration>
-          <processTypes>
-            <web>java -jar target/${project-name}.jar</web>
-          </processTypes>
-        </configuration>
+        <executions>
+          <execution>
+            <id>deploy</id>
+            <phase>install</phase>
+            <configuration>
+              <processTypes>
+                <web>java -jar target/${project-name}.jar</web>
+              </processTypes>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
 
       <plugin>
