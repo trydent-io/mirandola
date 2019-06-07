@@ -4,6 +4,7 @@ import io.vertx.core.AbstractVerticle
 import io.vertx.core.Verticle
 import io.vertx.core.Vertx.vertx
 import io.vertx.core.buffer.Buffer
+import io.vertx.core.http.HttpServerRequest
 import io.vertx.core.json.JsonObject
 import io.vertx.ext.web.Router.router
 import org.slf4j.LoggerFactory.getLogger
@@ -27,13 +28,13 @@ class HttpServerVerticle : AbstractVerticle(), Verticle {
     val httpServer = vertx.createHttpServer()
     val router = router(vertx)
 
-    router.get("/")
+    router.get("/:message")
       .produces("application/json")
       .handler {
         log.info("Received request on root.")
         it.response()
           .putHeader("content-type", "application/json")
-          .end(Message("Hello world").asBuffer)
+          .end(Message("Hello ${it.request().params["message"] ?: "world"}.").asBuffer)
       }
 
     val port = parseInt(System.getenv("PORT") ?: "8080")
@@ -45,6 +46,8 @@ class HttpServerVerticle : AbstractVerticle(), Verticle {
       }
   }
 }
+
+private val HttpServerRequest.params get() = this.params()
 
 private val log = getLogger("MAIN")
 
