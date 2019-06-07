@@ -7,7 +7,7 @@ import io.vertx.core.buffer.Buffer
 import io.vertx.core.json.JsonObject
 import io.vertx.ext.web.Router.router
 import org.slf4j.LoggerFactory.getLogger
-import java.lang.Integer.getInteger
+import java.lang.Integer.*
 
 interface Json {
   val asString: String
@@ -36,7 +36,13 @@ class HttpServerVerticle : AbstractVerticle(), Verticle {
           .end(Message("Hello world").asBuffer)
       }
 
-    httpServer.requestHandler(router).listen(getInteger(System.getenv("PORT")), "0.0.0.0")
+    val port = parseInt(System.getenv("PORT") ?: "8080")
+
+    httpServer
+      .requestHandler(router)
+      .listen(port, "0.0.0.0") {
+        log.info("HttpServer listens on port: $port.")
+      }
   }
 }
 
@@ -47,7 +53,7 @@ fun main() {
   vertx.deployVerticle(HttpServerVerticle()) {
     it
       .takeIf { result -> result.succeeded() }
-      .also { log.info("HttpServer started.") }
-      ?: log.error("HttpServer didn't start: ${it.cause().message}")
+      .also { log.info("HttpServer verticle deployed.") }
+      ?: log.error("HttpServer verticle met a problem: ${it.cause().message}")
   }
 }
