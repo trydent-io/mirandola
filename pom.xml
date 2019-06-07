@@ -162,7 +162,7 @@
         <version>${plugin-heroku.version}</version>
         <configuration>
           <processTypes>
-            <web>java -jar target/${project-name}.jar</web>
+            <web>java $JAVA_OPTS -jar target/${project-name}.jar</web>
           </processTypes>
         </configuration>
       </plugin>
