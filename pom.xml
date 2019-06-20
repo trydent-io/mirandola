@@ -2,27 +2,29 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>io.trydent</groupId>
-  <artifactId>mirandola</artifactId>
+  <groupId>io.trydent.olimpo</groupId>
+  <artifactId>olimpo</artifactId>
   <version>1.0-SNAPSHOT</version>
 
+  <name>Olimpo</name>
+
   <properties>
-    <project-name>mirandola</project-name>
+    <project-name>olimpo</project-name>
     <java.version>12</java.version>
-    <kotlin.version>1.3.31</kotlin.version>
-    <kotlin-jvm-target.version>1.8</kotlin-jvm-target.version>
+    <kotlin.version>1.3.40</kotlin.version>
+    <kotlin-jvm-target.version>12</kotlin-jvm-target.version>
     <main-verticle>io.trydent.olimpo.http.HttpServerVerticle</main-verticle>
     <main-launcher>io.trydent.olimpo.HttpServerVerticleKt</main-launcher>
 
     <log4j.version>2.11.2</log4j.version>
-    <slf4j.version>1.8.0-beta4</slf4j.version>
+    <slf4j.version>2.0.0-alpha0</slf4j.version>
     <vertx.version>3.7.1</vertx.version>
 
     <fabric-sdk-java.version>1.4.3</fabric-sdk-java.version>
     <jackson-module-kotlin.version>2.9.9</jackson-module-kotlin.version>
 
     <assertj.version>3.12.2</assertj.version>
-    <junit.version>5.5.0-RC1</junit.version>
+    <junit.version>5.5.0-RC2</junit.version>
     <awaitility.version>3.1.6</awaitility.version>
     <kafka.version>2.2.0</kafka.version>
     <kafka-junit5.version>3.1.1</kafka-junit5.version>

@@ -1,1 +1,1 @@
-web: java -jar target/mirandola.jar
+web: java -jar target/olimpo.jar
