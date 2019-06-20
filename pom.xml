@@ -8,7 +8,7 @@
 
   <properties>
     <project-name>mirandola</project-name>
-    <java.version>11</java.version>
+    <java.version>12</java.version>
     <kotlin.version>1.3.31</kotlin.version>
     <kotlin-jvm-target.version>1.8</kotlin-jvm-target.version>
     <main-verticle>io.trydent.mirandola.HttpServerVerticle</main-verticle>
