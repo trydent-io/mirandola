@@ -13,7 +13,9 @@ class HttpServerVerticle : AbstractVerticle(), Verticle {
   private val httpServer: HttpServer by lazy {
     OlimpoHttpServer(
       vertx,
-      WebrootResource("/*", router(vertx))
+      router(vertx),
+      WebrootResource(path = "/*"),
+      HelloworldResource(path = "/api/hello")
     )
   }
   private val port = getenv("PORT")?.let { parseInt(it) } ?: 8080
