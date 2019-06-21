@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory.getLogger
 
 interface HttpServer : (Int) -> Unit
 
+fun Router.chain(bind: Router.(Router) -> Unit) = this.run { bind(this); this }
+
 class OlimpoHttpServer(private val vertx: Vertx, private val router: Router, vararg resources: HttpResource) : HttpServer {
   private val log: Logger by lazy { getLogger(javaClass) }
 

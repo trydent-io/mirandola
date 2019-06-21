@@ -5,9 +5,9 @@ import io.vertx.core.Vertx
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory.getLogger
 
-interface Deployment : (Verticle) -> Unit
+interface Deploy : (Verticle) -> Unit
 
-class VerticleDeployment(private val vertx: Vertx) : Deployment {
+class VerticleDeploy(private val vertx: Vertx) : Deploy {
   private val log: Logger by lazy { getLogger(javaClass) }
 
   override fun invoke(verticle: Verticle) {
