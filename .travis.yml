@@ -1,0 +1,6 @@
+language: java
+jdk:
+  - openjdk11
+
+deploy:
+  - git push -f heroku master
