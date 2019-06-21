@@ -28,7 +28,7 @@ internal class HttpServerTest {
   }
 
   @Test
-  internal fun `should start a server`(vertx: Vertx) {
+  internal fun `should start a server`() {
     httpServer(8090)
 
     given()
