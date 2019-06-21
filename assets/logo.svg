@@ -9,9 +9,9 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="86.229668mm"
-   height="97mm"
-   viewBox="0 0 86.229668 97"
+   width="149.8698mm"
+   height="175.46667mm"
+   viewBox="0 0 149.8698 175.46667"
    version="1.1"
    id="svg5440"
    inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
@@ -25,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.979899"
-     inkscape:cx="108.45263"
-     inkscape:cy="173.85324"
+     inkscape:zoom="0.9899495"
+     inkscape:cx="153.69527"
+     inkscape:cy="344.71573"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -57,9 +57,13 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-62.718495,-94.28571)">
+     transform="translate(-62.718494,-15.819046)">
     <g
-       id="g5612">
+       id="g5612"
+       transform="matrix(2.3766082,0,0,2.3766082,-113.87096,-235.79331)"
+       inkscape:export-filename="/home/lug/prjs/private/olimpo/src/main/resources/webroot/img/logo.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96">
       <path
          d="M 122.28688,115.00009 H 89.379774 c -3.344686,0 -6.081889,2.73685 -6.081889,6.08189 v 26.95399 c 0,12.44593 10.089797,22.53537 22.535445,22.53537 12.446,0 22.53544,-10.08944 22.53544,-22.53537 v -26.95399 c 0,-3.34504 -2.73685,-6.08189 -6.08189,-6.08189"
          style="fill:#2d356d;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.03527778"
