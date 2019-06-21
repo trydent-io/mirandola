@@ -3,4 +3,5 @@ jdk:
   - openjdk11
 
 after_success:
+  - git remote add heroku https://heroku:${HEROKU_KEY}@git.heroku.com/olimpus.git
   - git push -f heroku master
