@@ -155,7 +155,7 @@
         </executions>
         <configuration>
           <redeploy>true</redeploy>
-          <launcher>io.trydent.olimpo.HttpServerVerticleKt</launcher>
+          <launcher>${main-launcher}</launcher>
         </configuration>
       </plugin>
       <plugin>
