@@ -9,10 +9,7 @@ interface HttpServer : (Int) -> Unit
 
 private val Vertx.router get() = router(this)
 
-private fun Router.chain(vararg resources: HttpResource): Router {
-  resources.forEach { resource -> resource(this) }
-  return this
-}
+private fun Router.chain(vararg resources: HttpResource) = this.apply { resources.forEach { it(this) } }
 
 class OlimpoHttpServer(private val vertx: Vertx, private vararg val resources: HttpResource) : HttpServer {
   private val log = getLogger(javaClass)
