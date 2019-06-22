@@ -2,21 +2,24 @@ package io.trydent.olimpo.http
 
 import io.vertx.core.Vertx
 import io.vertx.ext.web.Router
-import org.slf4j.Logger
+import io.vertx.ext.web.Router.router
 import org.slf4j.LoggerFactory.getLogger
 
 interface HttpServer : (Int) -> Unit
 
-fun Router.chain(bind: Router.(Router) -> Unit) = this.run { bind(this); this }
+private val Vertx.router get() = router(this)
 
-class OlimpoHttpServer(private val vertx: Vertx, private val router: Router, vararg resources: HttpResource) : HttpServer {
-  private val log: Logger by lazy { getLogger(javaClass) }
+private fun Router.chain(vararg resources: HttpResource): Router {
+  resources.forEach { resource -> resource(this) }
+  return this
+}
 
-  private val resources = resources
+class OlimpoHttpServer(private val vertx: Vertx, private vararg val resources: HttpResource) : HttpServer {
+  private val log = getLogger(javaClass)
 
   override fun invoke(port: Int) {
     vertx.createHttpServer()
-      .requestHandler(router.let { resources.forEach { resource -> resource(it) }; it })
+      .requestHandler(vertx.router.chain(*resources))
       .listen(port) {
         when {
           it.succeeded() -> log.info("Olimpo Http Server started on port $port.")

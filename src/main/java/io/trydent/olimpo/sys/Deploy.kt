@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory.getLogger
 interface Deploy : (Verticle) -> Unit
 
 class VerticleDeploy(private val vertx: Vertx) : Deploy {
-  private val log: Logger by lazy { getLogger(javaClass) }
+  private val log: Logger = getLogger(javaClass)
 
   override fun invoke(verticle: Verticle) {
     vertx.deployVerticle(verticle) {

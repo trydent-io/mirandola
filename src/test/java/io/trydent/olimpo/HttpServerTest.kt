@@ -7,7 +7,6 @@ import io.trydent.olimpo.http.HttpServer
 import io.trydent.olimpo.http.OlimpoHttpServer
 import io.trydent.olimpo.http.WebrootResource
 import io.vertx.core.Vertx
-import io.vertx.ext.web.Router.router
 import io.vertx.junit5.VertxExtension
 import org.hamcrest.core.Is.`is`
 import org.junit.jupiter.api.AfterEach
@@ -26,7 +25,6 @@ internal class HttpServerTest {
   internal fun setUp(vertx: Vertx) {
     httpServer = OlimpoHttpServer(
       vertx,
-      router(vertx),
       WebrootResource(path = "/*"),
       HelloworldResource(path = "/api/hello")
     )
