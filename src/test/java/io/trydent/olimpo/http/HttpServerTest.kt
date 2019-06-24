@@ -47,7 +47,7 @@ internal class HttpServerTest {
     given()
       .port(8090)
       .get()
-      .then()
+    .then()
       .statusCode(200)
       .contentType(HTML)
   }
@@ -59,7 +59,7 @@ internal class HttpServerTest {
     given()
       .port(8090)
       .get("/api/hello")
-      .then()
+    .then()
       .statusCode(200)
       .body("message", "Hello world.".isPresent)
   }
