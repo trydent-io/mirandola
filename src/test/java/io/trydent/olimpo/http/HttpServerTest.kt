@@ -1,11 +1,7 @@
-package io.trydent.olimpo
+package io.trydent.olimpo.http
 
 import io.restassured.RestAssured.given
 import io.restassured.http.ContentType.HTML
-import io.trydent.olimpo.http.HelloworldResource
-import io.trydent.olimpo.http.HttpServer
-import io.trydent.olimpo.http.OlimpoHttpServer
-import io.trydent.olimpo.http.WebrootResource
 import io.vertx.core.Vertx
 import io.vertx.junit5.VertxExtension
 import org.hamcrest.core.Is.`is`

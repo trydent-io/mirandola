@@ -30,6 +30,7 @@
     <kafka.version>2.2.0</kafka.version>
     <kafka-junit5.version>3.1.1</kafka-junit5.version>
     <mockk.version>1.9.3</mockk.version>
+    <jimfs.version>1.1</jimfs.version>
 
     <plugin-clean.version>3.1.0</plugin-clean.version>
     <plugin-compiler.version>3.8.0</plugin-compiler.version>
@@ -119,6 +120,11 @@
       <artifactId>vertx-junit5</artifactId>
       <version>${vertx.version}</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.jimfs</groupId>
+      <artifactId>jimfs</artifactId>
+      <version>${jimfs.version}</version>
     </dependency>
   </dependencies>
 
