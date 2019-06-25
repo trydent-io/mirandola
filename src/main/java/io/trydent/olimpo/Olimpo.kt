@@ -5,6 +5,11 @@ import io.trydent.olimpo.sys.Deploy
 import io.trydent.olimpo.sys.VerticleDeploy
 import io.vertx.core.Vertx.vertx
 
-private val deploy: Deploy by lazy { VerticleDeploy(vertx()) }
+private val deploy: Deploy by lazy {
+  VerticleDeploy(
+    vertx(),
+    HttpServerVerticle()
+  )
+}
 
-fun main() = deploy(HttpServerVerticle())
+fun main() = deploy()

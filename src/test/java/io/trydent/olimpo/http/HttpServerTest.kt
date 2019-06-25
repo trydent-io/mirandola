@@ -26,16 +26,6 @@ internal class HttpServerTest {
     )
   }
 
-  @AfterEach
-  internal fun tearDown(vertx: Vertx) {
-    vertx.close {
-      when {
-        it.succeeded() -> log.info("Vertx closed.")
-        it.failed() -> log.error("Vertx wasn't able to close itself.")
-      }
-    }
-  }
-
   @Test
   internal fun `should start a server`() {
     httpServer(8090)
