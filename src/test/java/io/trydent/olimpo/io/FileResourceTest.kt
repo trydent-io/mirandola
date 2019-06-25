@@ -1,6 +1,7 @@
 package io.trydent.olimpo.io
 
 import io.vertx.core.Vertx.vertx
+import io.vertx.core.buffer.Buffer.buffer
 import org.assertj.core.api.Assertions.assertThat
 import org.awaitility.Awaitility.await
 import org.junit.jupiter.api.Test
@@ -18,11 +19,13 @@ internal class FileResourceTest {
 
   @Test
   internal fun `should read a file from file-system`() {
-    val path = "/home/lug/tmp/file.txt"
+    val tmp = System.getProperty("java.io.tmpdir")
+    val path = "$tmp/file.txt"
+    fileSystem.writeFileBlocking(path, buffer("blabla"))
     val fsFile = FileSystemFile(fileSystem = fileSystem, file = path)
 
     val future = fsFile()
     await().until(future::isComplete)
-    assertThat(future.result().toString().trim()).isEqualTo("blabla")
+    assertThat(future.result()).isEqualTo(buffer("blabla"))
   }
 }
