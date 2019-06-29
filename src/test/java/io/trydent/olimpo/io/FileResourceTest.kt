@@ -14,7 +14,7 @@ internal class FileResourceTest {
   internal fun `should read a file from resources folder`() {
     val resource: FileResource = ResourceFile(file = "resource.file")
 
-    assertThat(resource().result().toString().trim()).isEqualTo("nothing")
+    assertThat(resource().result()).isEqualTo(buffer("nothing\n"))
   }
 
   @Test
