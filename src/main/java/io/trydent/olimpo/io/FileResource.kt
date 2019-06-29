@@ -7,17 +7,20 @@ import io.vertx.core.Future.succeededFuture
 import io.vertx.core.buffer.Buffer
 import io.vertx.core.buffer.Buffer.buffer
 import io.vertx.core.file.FileSystem
+import java.io.InputStream
 
 interface FileResource : () -> Future<Buffer>
 
-class ResourceFile(private val file: String) : FileResource {
-  override fun invoke() = (succeededBuffer ?: failedBuffer)!!
+fun String.asResource(): InputStream? = javaClass.classLoader.getResourceAsStream(this)
+fun InputStream.asBuffer(): Buffer = buffer(this.readAllBytes())
 
-  private val resourceAsInputStream get() = javaClass.classLoader.getResourceAsStream(file)
+class ResourceFile(private val file: String) : FileResource {
+  override fun invoke():Future<Buffer> = (succeededBuffer ?: failedBuffer)!!
+
   private val failedBuffer get() = failedFuture<Buffer>("File not found.")
-  private val succeededBuffer by lazy { succeededFuture(buffer(resourceAsInputStream?.readAllBytes())) }
+  private val succeededBuffer by lazy { succeededFuture(file.asResource()?.asBuffer()!!) }
 }
 
-class FileSystemFile(private val fileSystem: FileSystem, private val file: String) : FileResource {
-  override fun invoke() = future<Buffer>().apply { fileSystem.readFile(file, this) }!!
+class FileSystemFile(private val fileSystem: FileSystem, private val path: String) : FileResource {
+  override fun invoke() = future<Buffer>().apply { fileSystem.readFile(path, this) }!!
 }

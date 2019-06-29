@@ -12,11 +12,13 @@ class HttpServerVerticle : AbstractVerticle(), Verticle {
   private val httpServer: HttpServer by lazy {
     OlimpoHttpServer(
       vertx,
-      WebrootResource(path = "/*"),
-      HelloworldResource(path = "/api/hello")
+      WebrootResource(path = "/*", request = WebrootRequest(resources = "webroot")),
+      HelloResource(path = "/api/hello", request = HelloRequest(dest = "world"))
     )
   }
   private val port = getenv("PORT")?.let { parseInt(it) } ?: 8080
 
-  override fun start() = httpServer(port)
+  override fun start() {
+    httpServer(port)
+  }
 }
