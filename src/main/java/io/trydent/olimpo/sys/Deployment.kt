@@ -1,17 +1,16 @@
 package io.trydent.olimpo.sys
 
 import io.trydent.olimpo.http.HttpServerVerticle
-import io.vertx.core.Verticle
 import io.vertx.core.Vertx
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory.getLogger
 
-interface Deploy : () -> Unit
+interface Deployment : (Vertx) -> Unit
 
-class VerticleDeploy(private val vertx: Vertx, private vararg val verticles: HttpServerVerticle) : Deploy {
+class VerticleDeployment(private vararg val verticles: HttpServerVerticle) : Deployment {
   private val log: Logger = getLogger(javaClass)
 
-  override fun invoke() {
+  override fun invoke(vertx: Vertx) {
     verticles.forEach { verticle ->
       vertx.deployVerticle(verticle) {
         when {

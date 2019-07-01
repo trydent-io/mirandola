@@ -6,16 +6,16 @@ import io.vertx.ext.web.Router.router
 import org.slf4j.LoggerFactory.getLogger
 import io.vertx.core.http.HttpServer as VxHttpServer
 
-interface HttpServer : (Int) -> VxHttpServer
+interface HttpServer : (Vertx, Int) -> VxHttpServer
 
 private val Vertx.router get() = router(this)
 
 private fun Router.chain(vararg resources: HttpResource) = this.apply { resources.forEach { it(this) } }
 
-class OlimpoHttpServer(private val vertx: Vertx, private vararg val resources: HttpResource) : HttpServer {
+class OlimpoHttpServer(private vararg val resources: HttpResource) : HttpServer {
   private val log = getLogger(javaClass)
 
-  override fun invoke(port: Int): VxHttpServer = vertx
+  override fun invoke(vertx: Vertx, port: Int): VxHttpServer = vertx
     .createHttpServer()
     .requestHandler(vertx.router.chain(*resources))
     .listen(port) {
