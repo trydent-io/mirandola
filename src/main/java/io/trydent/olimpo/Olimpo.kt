@@ -1,10 +1,10 @@
 package io.trydent.olimpo
 
-import io.trydent.olimpo.http.HelloRequest
+import io.trydent.olimpo.http.HelloExchange
 import io.trydent.olimpo.http.HelloResource
 import io.trydent.olimpo.http.HttpServerVerticle
 import io.trydent.olimpo.http.OlimpoHttpServer
-import io.trydent.olimpo.http.WebrootRequest
+import io.trydent.olimpo.http.WebrootExchange
 import io.trydent.olimpo.http.WebrootResource
 import io.trydent.olimpo.sys.Deployment
 import io.trydent.olimpo.sys.VerticleDeployment
@@ -16,13 +16,13 @@ private val deployment: Deployment =
       OlimpoHttpServer(
         WebrootResource(
           path = "/*",
-          request = WebrootRequest(
+          request = WebrootExchange(
             resources = "webroot"
           )
         ),
         HelloResource(
           path = "/api/hello",
-          request = HelloRequest(
+          request = HelloExchange(
             dest = "world"
           )
         )

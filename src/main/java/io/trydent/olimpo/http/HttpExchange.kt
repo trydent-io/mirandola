@@ -8,7 +8,7 @@ import io.vertx.core.json.JsonObject
 import io.vertx.ext.web.RoutingContext
 import io.vertx.ext.web.handler.StaticHandler
 
-interface HttpRequest : () -> Handler<RoutingContext>
+interface HttpExchange : () -> Handler<RoutingContext>
 
 fun String.asWebroot(): Handler<RoutingContext> = StaticHandler.create(this)
 
@@ -19,11 +19,11 @@ fun HttpServerResponse.headers(vararg headers: Pair<String, String>) = this.appl
   headers.forEach { (header, value) -> this.putHeader(header, value) }
 }
 
-class WebrootRequest(private val resources: String) : HttpRequest {
+class WebrootExchange(private val resources: String) : HttpExchange {
   override fun invoke() = resources.asWebroot()
 }
 
-class HelloRequest(private val dest: String) : HttpRequest {
+class HelloExchange(private val dest: String) : HttpExchange {
   override fun invoke() = Handler<RoutingContext> {
     it.response()
       .headers(

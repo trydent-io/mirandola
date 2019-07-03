@@ -22,7 +22,7 @@ class ApolloRoutesTest {
   private val httpServer = OlimpoHttpServer(
     AddReadingRoute(
       path = "/add-reading",
-      request = AddReadingRequest(
+      exchange = AddReadingExchange(
         commands = commands
       )
     )

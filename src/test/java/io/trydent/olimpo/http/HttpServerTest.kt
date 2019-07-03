@@ -2,13 +2,9 @@ package io.trydent.olimpo.http
 
 import io.restassured.RestAssured.given
 import io.restassured.http.ContentType.HTML
-import io.restassured.http.ContentType.JSON
-import io.trydent.olimpo.http.media.json
-import io.trydent.olimpo.test.anyString
 import io.trydent.olimpo.test.isPresent
 import io.vertx.core.Vertx
 import io.vertx.junit5.VertxExtension
-import org.hamcrest.CoreMatchers.any
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -17,11 +13,11 @@ internal class HttpServerTest {
   private val httpServer: HttpServer = OlimpoHttpServer(
     WebrootResource(
       "/*",
-      WebrootRequest("webroot")
+      WebrootExchange("webroot")
     ),
     HelloResource(
       "/api/hello",
-      HelloRequest("world")
+      HelloExchange("world")
     )
   )
 
