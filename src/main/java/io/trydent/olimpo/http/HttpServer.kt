@@ -10,14 +10,14 @@ interface HttpServer : (Vertx, Int) -> VxHttpServer
 
 private val Vertx.router get() = router(this)
 
-private fun Router.chain(vararg resources: HttpResource) = this.apply { resources.forEach { it(this) } }
+private fun Router.chain(vararg routes: HttpRoute) = this.apply { routes.forEach { it(this) } }
 
-class OlimpoHttpServer(private vararg val resources: HttpResource) : HttpServer {
+class OlimpoHttpServer(private vararg val routes: HttpRoute) : HttpServer {
   private val log = getLogger(javaClass)
 
   override fun invoke(vertx: Vertx, port: Int): VxHttpServer = vertx
     .createHttpServer()
-    .requestHandler(vertx.router.chain(*resources))
+    .requestHandler(vertx.router.chain(*routes))
     .listen(port) {
       when {
         it.succeeded() -> log.info("Olimpo Http Server started on port $port.")

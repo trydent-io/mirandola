@@ -11,11 +11,11 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(VertxExtension::class)
 internal class HttpServerTest {
   private val httpServer: HttpServer = OlimpoHttpServer(
-    WebrootResource(
+    WebrootRoute(
       "/*",
       WebrootExchange("webroot")
     ),
-    HelloResource(
+    HelloRoute(
       "/api/hello",
       HelloExchange("world")
     )
