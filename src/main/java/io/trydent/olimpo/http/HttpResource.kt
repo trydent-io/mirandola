@@ -1,6 +1,5 @@
 package io.trydent.olimpo.http
 
-import io.trydent.olimpo.http.media.Json.json
 import io.vertx.ext.web.Router
 
 interface HttpResource : (Router) -> Router

@@ -1,7 +1,6 @@
 package io.trydent.olimpo.http
 
 import io.vertx.core.AbstractVerticle
-import io.vertx.core.Future
 import io.vertx.core.Verticle
 import org.slf4j.LoggerFactory.getLogger
 import java.lang.Integer.parseInt

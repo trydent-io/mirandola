@@ -2,9 +2,13 @@ package io.trydent.olimpo.http
 
 import io.restassured.RestAssured.given
 import io.restassured.http.ContentType.HTML
+import io.restassured.http.ContentType.JSON
+import io.trydent.olimpo.http.media.json
+import io.trydent.olimpo.test.anyString
+import io.trydent.olimpo.test.isPresent
 import io.vertx.core.Vertx
 import io.vertx.junit5.VertxExtension
-import org.hamcrest.core.Is.`is`
+import org.hamcrest.CoreMatchers.any
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -12,15 +16,15 @@ import org.junit.jupiter.api.extension.ExtendWith
 internal class HttpServerTest {
   private val vertx = Vertx.vertx()
   private val httpServer: HttpServer = OlimpoHttpServer(
-      WebrootResource(
-        "/*",
-        WebrootRequest("webroot")
-      ),
-      HelloResource(
-        "/api/hello",
-        HelloRequest("world")
-      )
+    WebrootResource(
+      "/*",
+      WebrootRequest("webroot")
+    ),
+    HelloResource(
+      "/api/hello",
+      HelloRequest("world")
     )
+  )
 
   @Test
   internal fun `should start a server`() {
@@ -29,7 +33,7 @@ internal class HttpServerTest {
     given()
       .port(8090)
       .get()
-      .then()
+    .then()
       .statusCode(200)
       .contentType(HTML)
   }
@@ -41,10 +45,8 @@ internal class HttpServerTest {
     given()
       .port(8090)
       .get("/api/hello")
-      .then()
+    .then()
       .statusCode(200)
       .body("message", "Hello world!".isPresent)
   }
 }
-
-private val String.isPresent get() = `is`(this)

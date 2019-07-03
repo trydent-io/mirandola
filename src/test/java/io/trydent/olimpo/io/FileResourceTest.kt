@@ -1,7 +1,7 @@
 package io.trydent.olimpo.io
 
 import io.vertx.core.Vertx.vertx
-import io.vertx.core.buffer.Buffer.*
+import io.vertx.core.buffer.Buffer.buffer
 import org.assertj.core.api.Assertions.assertThat
 import org.awaitility.Awaitility.await
 import org.junit.jupiter.api.Test
