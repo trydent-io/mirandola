@@ -14,7 +14,6 @@ import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(VertxExtension::class)
 internal class HttpServerTest {
-  private val vertx = Vertx.vertx()
   private val httpServer: HttpServer = OlimpoHttpServer(
     WebrootResource(
       "/*",
@@ -27,7 +26,7 @@ internal class HttpServerTest {
   )
 
   @Test
-  internal fun `should start a server`() {
+  internal fun `should start a server`(vertx: Vertx) {
     httpServer(vertx, 8090)
 
     given()
@@ -39,7 +38,7 @@ internal class HttpServerTest {
   }
 
   @Test
-  internal fun `should get a json message`() {
+  internal fun `should get a json message`(vertx: Vertx) {
     httpServer(vertx, 8090)
 
     given()

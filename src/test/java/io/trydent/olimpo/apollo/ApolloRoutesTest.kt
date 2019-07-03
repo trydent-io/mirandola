@@ -6,19 +6,21 @@ import io.trydent.olimpo.http.OlimpoHttpServer
 import io.trydent.olimpo.http.media.json
 import io.trydent.olimpo.test.anyString
 import io.vertx.core.Vertx
+import io.vertx.junit5.VertxExtension
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 
+@ExtendWith(VertxExtension::class)
 class ApolloRoutesTest {
-  private val vertx = Vertx.vertx()
   private val httpServer = OlimpoHttpServer(
     AddReadingRoute(
-      path = "/sun/addReading",
+      path = "/addReading",
       request = AddReadingRequest()
     )
   )
 
   @Test
-  internal fun `should add reading`() {
+  internal fun `should add reading`(vertx: Vertx) {
     httpServer(vertx, 8090)
 
     given()
@@ -31,7 +33,7 @@ class ApolloRoutesTest {
         )
       )
       .contentType(JSON)
-      .post("/sun/addReading")
+      .post("/addReading")
     .then()
       .statusCode(200)
       .contentType(JSON)
