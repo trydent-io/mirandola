@@ -17,7 +17,7 @@
     <main-verticle>io.trydent.olimpo.http.HttpServerVerticle</main-verticle>
     <main-launcher>io.trydent.olimpo.OlimpoKt</main-launcher>
 
-    <log4j.version>2.11.2</log4j.version>
+    <log4j.version>2.12.0</log4j.version>
     <slf4j.version>2.0.0-alpha0</slf4j.version>
     <vertx.version>3.7.1</vertx.version>
 
@@ -25,7 +25,7 @@
     <jackson-module-kotlin.version>2.9.9</jackson-module-kotlin.version>
 
     <assertj.version>3.12.2</assertj.version>
-    <junit.version>5.5.0-RC2</junit.version>
+    <junit.version>5.5.0</junit.version>
     <awaitility.version>3.1.6</awaitility.version>
     <kafka.version>2.2.0</kafka.version>
     <kafka-junit5.version>3.1.1</kafka-junit5.version>

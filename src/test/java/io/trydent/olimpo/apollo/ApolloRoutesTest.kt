@@ -5,28 +5,35 @@ import io.mockk.mockk
 import io.mockk.verify
 import io.restassured.RestAssured.given
 import io.restassured.http.ContentType.JSON
-import io.trydent.olimpo.apollo.ApolloCommand.*
-import io.trydent.olimpo.bus.CommandGateway
+import io.trydent.olimpo.apollo.ApolloCommand.AddReading
+import io.trydent.olimpo.bus.CommandBus
+import io.trydent.olimpo.http.HttpServer
 import io.trydent.olimpo.http.OlimpoHttpServer
 import io.trydent.olimpo.http.media.json
 import io.trydent.olimpo.test.isPresent
 import io.vertx.core.Vertx
 import io.vertx.junit5.VertxExtension
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(VertxExtension::class)
 class ApolloRoutesTest {
-  private val commands: CommandGateway = mockk()
+  private val commands: CommandBus = mockk()
+  private lateinit var httpServer: HttpServer
 
-  private val httpServer = OlimpoHttpServer(
-    AddReadingRoute(
-      path = "/add-reading",
-      exchange = AddReadingExchange(
-        commands = commands
+  @BeforeEach
+  internal fun setUp(vertx: Vertx) {
+    httpServer = OlimpoHttpServer(
+      vertx,
+      AddReadingRoute(
+        path = "/add-reading",
+        exchange = AddReadingExchange(
+          bus = commands
+        )
       )
     )
-  )
+  }
 
   @Test
   internal fun `should add reading`(vertx: Vertx) {
@@ -37,7 +44,7 @@ class ApolloRoutesTest {
     )
 
     every { commands.send(command = AddReading, params = any()) } returns "commandId"
-    httpServer(vertx, 8090)
+    httpServer(8090)
 
     given()
       .port(8090)
@@ -45,7 +52,7 @@ class ApolloRoutesTest {
       .accept(JSON)
       .contentType(JSON)
       .post("/add-reading")
-    .then()
+      .then()
       .statusCode(200)
       .contentType(JSON)
       .body("commandId", "commandId".isPresent)
