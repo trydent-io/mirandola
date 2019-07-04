@@ -10,20 +10,22 @@ import io.vertx.core.Vertx.vertx
 import java.lang.Integer.parseInt
 import java.lang.System.getenv
 
-fun main() = vertx().deploy { vertx ->
-  OlimpoHttpServer(
-    vertx,
-    WebrootRoute(
-      path = "/*",
-      request = WebrootExchange(
-        resources = "webroot"
+fun main() = vertx().deploy(
+  { vertx ->
+    OlimpoHttpServer(
+      vertx,
+      WebrootRoute(
+        path = "/*",
+        exchange = WebrootExchange(
+          resources = "webroot"
+        )
+      ),
+      HelloRoute(
+        path = "/api/hello",
+        exchange = HelloExchange(
+          dest = "world"
+        )
       )
-    ),
-    HelloRoute(
-      path = "/api/hello",
-      request = HelloExchange(
-        dest = "world"
-      )
-    )
-  ).invoke(getenv("PORT")?.let { parseInt(it) } ?: 8080)
-}
+    ).invoke(getenv("PORT")?.let { parseInt(it) } ?: 8080)
+  }
+)

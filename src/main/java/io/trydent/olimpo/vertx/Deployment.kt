@@ -7,15 +7,15 @@ import java.util.UUID.randomUUID
 
 private val log = getLogger("Verticle-${randomUUID()}")
 
-fun Vertx.deploy(verticle: (Vertx) -> Unit) = this.apply {
+fun Vertx.deploy(vararg services: (Vertx) -> Unit) = services.forEach { service ->
   deployVerticle(
     object : AbstractVerticle() {
-      override fun start() = verticle(vertx)
+      override fun start() = service(vertx)
     }
   ) {
     when {
-      it.succeeded() -> log.info("Verticle ${verticle.javaClass.name} deployed.")
-      it.failed() -> log.error("Verticle ${verticle.javaClass.name} not deployed: ${it.cause().message}.")
+      it.succeeded() -> log.info("Verticle ${service.javaClass.name} deployed.")
+      it.failed() -> log.error("Verticle ${service.javaClass.name} not deployed: ${it.cause().message}.")
     }
   }
 }

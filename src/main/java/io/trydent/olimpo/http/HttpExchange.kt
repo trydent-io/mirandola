@@ -3,6 +3,7 @@ package io.trydent.olimpo.http
 import io.netty.handler.codec.http.HttpHeaderValues
 import io.trydent.olimpo.http.HttpHeader.ContentType
 import io.trydent.olimpo.http.HttpValue.ApplicationJson
+import io.trydent.olimpo.http.media.Json
 import io.trydent.olimpo.http.media.json
 import io.vertx.core.AsyncResult
 import io.vertx.core.Handler
@@ -29,8 +30,8 @@ interface HttpExchange : () -> Handler<RoutingContext>
 
 fun String.asWebroot(): Handler<RoutingContext> = StaticHandler.create(this)
 
-fun HttpServerResponse.end(json: JsonObject) = this.end(json.toBuffer())
-fun HttpServerResponse.end(json: JsonObject, handler: Handler<AsyncResult<Void>>) = this.end(json.toBuffer(), handler)
+fun HttpServerResponse.end(json: Json) = this.end(json.toBuffer())
+fun HttpServerResponse.end(json: Json, handler: Handler<AsyncResult<Void>>) = this.end(json.toBuffer(), handler)
 
 fun HttpServerResponse.headers(vararg headers: Pair<HttpHeader, HttpValue>) = this.apply {
   headers.forEach { (header, value) -> this.putHeader("$header", "$value") }
