@@ -16,13 +16,16 @@ internal class HttpServerTest(vertx: Vertx) {
   private val port: Port = mockk()
   private val httpServer = HttpServer(
     vertx,
-    WebrootRoute(
-      "/*",
-      WebrootFolder("webroot")
-    ),
-    HelloRoute(
-      "/api/hello",
-      HelloExchange("world")
+    HttpSwitch(
+      vertx,
+      WebrootRoute(
+        path = "/*",
+        exchange = WebrootFolder("webroot")
+      ),
+      HelloRoute(
+        path = "/api/hello",
+        exchange = HelloExchange("world")
+      )
     )
   )
 
@@ -35,7 +38,7 @@ internal class HttpServerTest(vertx: Vertx) {
     given()
       .port(8090)
       .get()
-    .then()
+      .then()
       .statusCode(200)
       .contentType(HTML)
   }
@@ -49,7 +52,7 @@ internal class HttpServerTest(vertx: Vertx) {
     given()
       .port(8090)
       .get("/api/hello")
-    .then()
+      .then()
       .statusCode(200)
       .body("message", "Hello world!".isPresent)
   }
