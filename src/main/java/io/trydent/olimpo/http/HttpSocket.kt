@@ -6,12 +6,14 @@ import io.vertx.core.Vertx
 import org.slf4j.LoggerFactory.getLogger
 import java.lang.Integer.parseInt
 
-class EnvironmentPort(private val property: Property) : Port {
+class EnvPort(private val property: Property) : Port {
   override fun invoke(default: Int): Int = try {
     parseInt(property())
   } catch (nfe: NumberFormatException) {
     default
   }
+
+  override fun toString(): String = "${this(-1)}"
 }
 
 interface HttpSocket : (Port) -> Unit
