@@ -1,7 +1,5 @@
 package io.trydent.olimpo.apollo
 
-import io.trydent.olimpo.bus.Command
-
-enum class ApolloCommand : Command {
+enum class ApolloCommand {
   AddReading
 }

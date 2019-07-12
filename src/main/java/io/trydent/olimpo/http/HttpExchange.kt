@@ -9,7 +9,6 @@ import io.vertx.core.AsyncResult
 import io.vertx.core.Handler
 import io.vertx.core.http.HttpHeaders
 import io.vertx.core.http.HttpServerResponse
-import io.vertx.core.json.JsonObject
 import io.vertx.ext.web.RoutingContext
 import io.vertx.ext.web.handler.StaticHandler
 
@@ -37,8 +36,8 @@ fun HttpServerResponse.headers(vararg headers: Pair<HttpHeader, HttpValue>) = th
   headers.forEach { (header, value) -> this.putHeader("$header", "$value") }
 }
 
-class WebrootExchange(private val resources: String) : HttpExchange {
-  override fun invoke() = resources.asWebroot()
+class WebrootFolder(private val folder: String) : HttpExchange {
+  override fun invoke() = folder.asWebroot()
 }
 
 class HelloExchange(private val dest: String) : HttpExchange {

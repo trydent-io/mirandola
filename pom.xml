@@ -45,6 +45,7 @@
     <plugin-surefire.version>3.0.0-M3</plugin-surefire.version>
     <plugin-versions.version>2.7</plugin-versions.version>
     <plugin-vertx.version>1.0.18</plugin-vertx.version>
+    <system-rules.version>1.19.0</system-rules.version>
   </properties>
 
   <dependencies>
@@ -94,6 +95,12 @@
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
       <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.github.stefanbirkner</groupId>
+      <artifactId>system-rules</artifactId>
+      <version>${system-rules.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>

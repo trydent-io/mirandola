@@ -8,7 +8,7 @@ interface HttpRoute : (Router) -> Router
 
 fun Route.produces(value: HttpValue): Route = this.produces("$value")
 
-class WebrootRoute(private val path: String, private val exchange: WebrootExchange) : HttpRoute {
+class WebrootRoute(private val path: String, private val exchange: WebrootFolder) : HttpRoute {
   override fun invoke(router: Router) = router.apply {
     route(path).handler(exchange())
   }

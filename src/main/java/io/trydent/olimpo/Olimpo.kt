@@ -1,23 +1,23 @@
 package io.trydent.olimpo
 
+import io.trydent.olimpo.sys.EnvironmentVariable
+import io.trydent.olimpo.http.EnvironmentPort
 import io.trydent.olimpo.http.HelloExchange
 import io.trydent.olimpo.http.HelloRoute
-import io.trydent.olimpo.http.OlimpoHttpServer
-import io.trydent.olimpo.http.WebrootExchange
+import io.trydent.olimpo.http.HttpServer
+import io.trydent.olimpo.http.WebrootFolder
 import io.trydent.olimpo.http.WebrootRoute
 import io.trydent.olimpo.vertx.deploy
 import io.vertx.core.Vertx.vertx
-import java.lang.Integer.parseInt
-import java.lang.System.getenv
 
 fun main() = vertx().deploy(
   { vertx ->
-    OlimpoHttpServer(
+    HttpServer(
       vertx,
       WebrootRoute(
         path = "/*",
-        exchange = WebrootExchange(
-          resources = "webroot"
+        exchange = WebrootFolder(
+          folder = "webroot"
         )
       ),
       HelloRoute(
@@ -26,6 +26,10 @@ fun main() = vertx().deploy(
           dest = "world"
         )
       )
-    ).invoke(getenv("PORT")?.let { parseInt(it) } ?: 8080)
+    )(
+      EnvironmentPort(
+        EnvironmentVariable("PORT")
+      )
+    )
   }
 )
