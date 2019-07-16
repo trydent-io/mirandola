@@ -15,9 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 internal class HttpServerTest(vertx: Vertx) {
   private val port: Port = mockk()
   private val httpServer = HttpServer(
-    vertx,
     HttpSwitch(
-      vertx,
       WebrootRoute(
         path = "/*",
         exchange = WebrootFolder("webroot")

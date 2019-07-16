@@ -1,4 +1,4 @@
-package io.trydent.olimpo.http
+package io.trydent.olimpo.io
 
 import io.mockk.every
 import io.mockk.mockk

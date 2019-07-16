@@ -2,10 +2,17 @@ package io.trydent.olimpo.vertx
 
 import io.vertx.core.AbstractVerticle
 import io.vertx.core.Vertx
+import io.vertx.core.Vertx.vertx
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory.getLogger
 import java.util.UUID.randomUUID
 
 private val log = getLogger("Verticle-${randomUUID()}")
+
+interface VertxContext {
+  val vertx: Vertx get() = vertx()
+  val log: Logger get() = getLogger(javaClass)
+}
 
 fun Vertx.deploy(vararg services: (Vertx) -> Unit) = services.forEach { service ->
   deployVerticle(

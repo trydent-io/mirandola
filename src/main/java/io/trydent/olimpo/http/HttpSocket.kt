@@ -1,24 +1,12 @@
 package io.trydent.olimpo.http
 
+import io.trydent.olimpo.VertxContainer.vertx
 import io.trydent.olimpo.io.Port
-import io.trydent.olimpo.sys.Property
-import io.vertx.core.Vertx
 import org.slf4j.LoggerFactory.getLogger
-import java.lang.Integer.parseInt
-
-class EnvPort(private val property: Property) : Port {
-  override fun invoke(default: Int): Int = try {
-    parseInt(property())
-  } catch (nfe: NumberFormatException) {
-    default
-  }
-
-  override fun toString(): String = "${this(-1)}"
-}
 
 interface HttpSocket : (Port) -> Unit
 
-class HttpServer(private val vertx: Vertx, private val request: HttpRequest) : HttpSocket {
+class HttpServer(private val request: HttpRequest) : HttpSocket {
   private val log = getLogger(javaClass)
 
   override fun invoke(port: Port) {
