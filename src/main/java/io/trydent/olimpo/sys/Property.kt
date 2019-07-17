@@ -2,7 +2,7 @@ package io.trydent.olimpo.sys
 
 interface Property : () -> String? {
   companion object {
-    fun env(variable: String): Property = EnvVar(variable)
+    fun envVar(name: String): Property = EnvVar(name)
 
     fun system(property: String): Property = SystemProperty(property)
   }

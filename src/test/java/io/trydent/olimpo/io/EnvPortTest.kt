@@ -14,17 +14,17 @@ internal class EnvPortTest {
   internal fun `should get environment variable`() {
     every { environmentVariable() } returns "8080"
 
-    val port = EnvPort(environmentVariable)
+    val port = EnvPort(environmentVariable, default = Port.of(8090))
 
-    assertThat(port(8090)).isNotEqualTo(8090)
+    assertThat(port()).isNotEqualTo(8090)
   }
 
   @Test
   internal fun `should get default when environment variable is null`() {
     every { environmentVariable() } returns null
 
-    val port = EnvPort(environmentVariable)
+    val port = EnvPort(environmentVariable, default = Port.of(8090))
 
-    assertThat(port(8090)).isEqualTo(8090)
+    assertThat(port()).isEqualTo(8090)
   }
 }

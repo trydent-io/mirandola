@@ -29,7 +29,7 @@ internal class HttpServerTest(vertx: Vertx) {
 
   @Test
   internal fun `should start a server`() {
-    every { port(any()) } returns 8090
+    every { port() } returns 8090
 
     httpServer(port)
 
@@ -43,7 +43,7 @@ internal class HttpServerTest(vertx: Vertx) {
 
   @Test
   internal fun `should get a json message`() {
-    every { port(any()) } returns 8090
+    every { port() } returns 8090
 
     httpServer(port)
 

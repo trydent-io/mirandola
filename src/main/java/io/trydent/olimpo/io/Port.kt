@@ -1,20 +1,32 @@
 package io.trydent.olimpo.io
 
 import io.trydent.olimpo.sys.Property
+import io.trydent.olimpo.sys.Property.Companion.envVar
 
-interface Port : (Int) -> Int {
+@Suppress("MemberVisibilityCanBePrivate")
+interface Port : () -> Int {
   companion object {
-    fun env(variable: String): Port = EnvPort(Property.env(variable))
+    fun fromEnvVar(name: String, default: Int): Port = EnvPort(envVar(name), of(default))
+
+    fun of(value: Int): Port? = value
+      .takeIf { it > 0 }
+      ?.let(::PortImpl)
   }
 }
 
-internal class EnvPort(private val property: Property) : Port {
-  override fun invoke(default: Int): Int = try {
+internal class PortImpl(private val port: Int) : Port {
+  override fun invoke(): Int = port
+
+  override fun toString() = "${this()}"
+}
+
+internal class EnvPort(private val property: Property, private val default: Port?) : Port {
+  override fun invoke(): Int = try {
     Integer.parseInt(property())
   } catch (nfe: NumberFormatException) {
-    default
+    default!!()
   }
 
-  override fun toString(): String = "${this(-1)}"
+  override fun toString() = "${this()}"
 }
 
