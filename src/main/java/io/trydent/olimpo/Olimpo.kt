@@ -8,9 +8,12 @@ import io.trydent.olimpo.io.Port.Companion.envPort
 import io.trydent.olimpo.vertx.deploy
 import io.vertx.core.Vertx.vertx
 
-fun main() = vertx().deploy({
-    httpServer(
-      switch(
+fun main() = vertx().deploy({ vertx ->
+  httpServer(
+    vertx,
+    request = switch(
+      vertx,
+      routes = *arrayOf(
         webroot(
           path = "/*",
           exchange = staticContent(
@@ -18,6 +21,6 @@ fun main() = vertx().deploy({
           )
         )
       )
-    ).invoke(envPort(name = "PORT", default = 8080))
-  }
-)
+    )
+  ).invoke(envPort(name = "PORT", default = 8080))
+})

@@ -40,20 +40,6 @@ fun HttpServerResponse.headers(vararg headers: Pair<HttpHeader, HttpValue>) = th
   headers.forEach { (header, value) -> this.putHeader("$header", "$value") }
 }
 
-class StaticContent(private val folder: String) : HttpExchange {
+internal class StaticContent(private val folder: String) : HttpExchange {
   override fun invoke() = folder.asWebroot()
-}
-
-class HelloExchange(private val dest: String) : HttpExchange {
-  override fun invoke() = Handler<RoutingContext> {
-    it.response()
-      .headers(
-        ContentType to ApplicationJson
-      )
-      .end(
-        json(
-          "message" to "Hello $dest!"
-        )
-      )
-  }
 }

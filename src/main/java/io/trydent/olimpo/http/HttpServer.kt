@@ -2,12 +2,11 @@ package io.trydent.olimpo.http
 
 import io.trydent.olimpo.io.Port
 import io.vertx.core.Vertx
-import io.vertx.core.Vertx.vertx
 import org.slf4j.LoggerFactory.getLogger
 
 interface HttpServer : (Port) -> Unit {
   companion object {
-    fun httpServer(request: HttpRequest): HttpServer = HttpRequestServer(vertx(), request)
+    fun httpServer(vertx: Vertx, request: HttpRequest): HttpServer = HttpRequestServer(vertx, request)
   }
 }
 

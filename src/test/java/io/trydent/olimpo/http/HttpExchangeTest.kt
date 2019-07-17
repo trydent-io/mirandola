@@ -9,12 +9,5 @@ internal class HttpExchangeTest {
   internal fun `should retrieve webroot`() {
     assertThat("webroot".asWebroot()).isInstanceOf(StaticHandler::class.java)
   }
-
-  @Test
-  internal fun `should retrive json`() {
-    val request = HelloExchange(dest = "world")
-
-    assertThat(request()).isNotNull
-  }
 }
 
