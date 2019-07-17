@@ -1,28 +1,23 @@
 package io.trydent.olimpo
 
-import io.trydent.olimpo.http.HttpServer
-import io.trydent.olimpo.http.HttpSwitch
-import io.trydent.olimpo.http.WebrootFolder
-import io.trydent.olimpo.http.WebrootRoute
-import io.trydent.olimpo.io.Port
+import io.trydent.olimpo.http.HttpExchange.Companion.staticContent
+import io.trydent.olimpo.http.HttpRequest.Companion.switch
+import io.trydent.olimpo.http.HttpRoute.Companion.webroot
+import io.trydent.olimpo.http.HttpServer.Companion.httpServer
+import io.trydent.olimpo.io.Port.Companion.envPort
 import io.trydent.olimpo.vertx.deploy
-import io.vertx.core.Vertx
 import io.vertx.core.Vertx.vertx
 
-object VertxContainer {
-  val vertx: Vertx by lazy { vertx() }
-}
-
 fun main() = vertx().deploy({
-    HttpServer(
-      HttpSwitch(
-        WebrootRoute(
+    httpServer(
+      switch(
+        webroot(
           path = "/*",
-          exchange = WebrootFolder(
+          exchange = staticContent(
             folder = "webroot"
           )
         )
       )
-    ).invoke(Port.fromEnvVar(name = "PORT", default = 8080))
+    ).invoke(envPort(name = "PORT", default = 8080))
   }
 )

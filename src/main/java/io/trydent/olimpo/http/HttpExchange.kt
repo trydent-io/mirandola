@@ -1,6 +1,6 @@
 package io.trydent.olimpo.http
 
-import io.netty.handler.codec.http.HttpHeaderValues
+import io.netty.handler.codec.http.HttpHeaderValues.APPLICATION_JSON
 import io.trydent.olimpo.http.HttpHeader.ContentType
 import io.trydent.olimpo.http.HttpValue.ApplicationJson
 import io.trydent.olimpo.http.media.Json
@@ -19,13 +19,17 @@ enum class HttpHeader(private val value: String) {
 }
 
 enum class HttpValue(private val value: String) {
-  ApplicationJson("${HttpHeaderValues.APPLICATION_JSON}");
+  ApplicationJson("$APPLICATION_JSON");
 
   override fun toString() = value
 }
 
 
-interface HttpExchange : () -> Handler<RoutingContext>
+interface HttpExchange : () -> Handler<RoutingContext> {
+  companion object {
+    fun staticContent(folder: String): HttpExchange = StaticContent(folder)
+  }
+}
 
 fun String.asWebroot(): Handler<RoutingContext> = StaticHandler.create(this)
 
@@ -36,7 +40,7 @@ fun HttpServerResponse.headers(vararg headers: Pair<HttpHeader, HttpValue>) = th
   headers.forEach { (header, value) -> this.putHeader("$header", "$value") }
 }
 
-class WebrootFolder(private val folder: String) : HttpExchange {
+class StaticContent(private val folder: String) : HttpExchange {
   override fun invoke() = folder.asWebroot()
 }
 

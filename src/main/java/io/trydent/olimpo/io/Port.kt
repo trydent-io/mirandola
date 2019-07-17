@@ -6,9 +6,9 @@ import io.trydent.olimpo.sys.Property.Companion.envVar
 @Suppress("MemberVisibilityCanBePrivate")
 interface Port : () -> Int {
   companion object {
-    fun fromEnvVar(name: String, default: Int): Port = EnvPort(envVar(name), of(default))
+    fun envPort(name: String, default: Int): Port = EnvPort(envVar(name), port(default))
 
-    fun of(value: Int): Port? = value
+    fun port(value: Int): Port? = value
       .takeIf { it > 0 }
       ?.let(::PortImpl)
   }

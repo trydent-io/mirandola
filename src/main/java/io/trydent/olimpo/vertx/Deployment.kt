@@ -9,11 +9,6 @@ import java.util.UUID.randomUUID
 
 private val log = getLogger("Verticle-${randomUUID()}")
 
-interface VertxContext {
-  val vertx: Vertx get() = vertx()
-  val log: Logger get() = getLogger(javaClass)
-}
-
 fun Vertx.deploy(vararg services: (Vertx) -> Unit) = services.forEach { service ->
   deployVerticle(
     object : AbstractVerticle() {

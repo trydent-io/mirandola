@@ -1,13 +1,17 @@
 package io.trydent.olimpo.http
 
-import io.trydent.olimpo.VertxContainer.vertx
 import io.trydent.olimpo.io.Port
+import io.vertx.core.Vertx
+import io.vertx.core.Vertx.vertx
 import org.slf4j.LoggerFactory.getLogger
 
-interface HttpSocket : (Port) -> Unit {
+interface HttpServer : (Port) -> Unit {
+  companion object {
+    fun httpServer(request: HttpRequest): HttpServer = HttpRequestServer(vertx(), request)
+  }
 }
 
-class HttpServer(private val request: HttpRequest) : HttpSocket {
+internal class HttpRequestServer(private val vertx: Vertx, private val request: HttpRequest) : HttpServer {
   private val log = getLogger(javaClass)
 
   override fun invoke(port: Port) {
