@@ -1,7 +1,7 @@
 package io.trydent.olimpo.dispatch
 
 import io.trydent.olimpo.apollo.Id
-import io.trydent.olimpo.http.media.Json
+import io.trydent.olimpo.vertx.Json
 import io.vertx.core.eventbus.EventBus
 import java.util.UUID.randomUUID
 

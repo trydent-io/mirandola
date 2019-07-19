@@ -22,5 +22,7 @@ fun main() = vertx().deploy({ vertx ->
         )
       )
     )
-  ).invoke(envPort(name = "PORT", default = 8080))
+  )(
+    envPort(name = "PORT", default = 8080)
+  )
 })

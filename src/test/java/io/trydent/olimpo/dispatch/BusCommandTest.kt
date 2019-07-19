@@ -3,7 +3,7 @@ package io.trydent.olimpo.dispatch
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import io.trydent.olimpo.http.media.json
+import io.trydent.olimpo.vertx.json
 import io.vertx.core.eventbus.EventBus
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

@@ -1,6 +1,7 @@
 package io.trydent.olimpo.apollo
 
 import io.trydent.olimpo.dispatch.BusCommand
+import io.trydent.olimpo.http.ActionExecution
 import io.trydent.olimpo.http.HttpRequestServer
 import io.trydent.olimpo.http.HttpSwitch
 import io.vertx.core.Vertx
@@ -16,7 +17,7 @@ internal class AddReadingRouteTest(vertx: Vertx) {
       vertx,
       AddReadingRoute(
         path = "/apollo/:command",
-        exchange = AddReadingExchange(
+        exchange = ActionExecution(
           command = BusCommand(
             vertx.eventBus()
           )

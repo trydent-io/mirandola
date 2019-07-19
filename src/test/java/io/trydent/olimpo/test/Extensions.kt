@@ -8,6 +8,11 @@ import org.hamcrest.core.Is
 
 val String.isPresent: Matcher<String> get() = Is.`is`(this)
 
-fun RequestSpecification.body(json: JsonObject): RequestSpecification = this.body(json.toBuffer().bytes)
+fun RequestSpecification.json(vararg fields: Pair<String, *>) =
+  this.body(
+    JsonObject.mapFrom(
+      mapOf(*fields)
+    ).toBuffer().bytes
+  )
 
 fun anyString(): Matcher<String> = any(String::class.java)

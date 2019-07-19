@@ -11,6 +11,8 @@ interface Port : () -> Int {
     fun port(value: Int): Port? = value
       .takeIf { it > 0 }
       ?.let(::PortImpl)
+
+    fun portOrDie(value: Int): Port = port(value)!!
   }
 }
 

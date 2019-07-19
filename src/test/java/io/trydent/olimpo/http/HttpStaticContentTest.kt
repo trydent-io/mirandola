@@ -4,10 +4,10 @@ import io.vertx.ext.web.handler.StaticHandler
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-internal class HttpExchangeTest {
+internal class HttpStaticContentTest {
   @Test
   internal fun `should retrieve webroot`() {
-    assertThat("webroot".asWebroot()).isInstanceOf(StaticHandler::class.java)
+    assertThat(StaticHandler.create("webroot")).isInstanceOf(StaticHandler::class.java)
   }
 }
 

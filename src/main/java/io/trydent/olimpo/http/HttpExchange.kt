@@ -1,45 +1,44 @@
 package io.trydent.olimpo.http
 
-import io.netty.handler.codec.http.HttpHeaderValues.APPLICATION_JSON
-import io.trydent.olimpo.http.HttpHeader.ContentType
-import io.trydent.olimpo.http.HttpValue.ApplicationJson
-import io.trydent.olimpo.http.media.Json
-import io.trydent.olimpo.http.media.json
-import io.vertx.core.AsyncResult
+import io.trydent.olimpo.dispatch.Command
+import io.trydent.olimpo.vertx.HttpHeader.*
+import io.trydent.olimpo.vertx.HttpValue.*
+import io.trydent.olimpo.vertx.end
+import io.trydent.olimpo.vertx.headers
+import io.trydent.olimpo.vertx.json
 import io.vertx.core.Handler
-import io.vertx.core.http.HttpHeaders
-import io.vertx.core.http.HttpServerResponse
+import io.vertx.core.buffer.Buffer
 import io.vertx.ext.web.RoutingContext
 import io.vertx.ext.web.handler.StaticHandler
-
-enum class HttpHeader(private val value: String) {
-  ContentType("${HttpHeaders.CONTENT_TYPE}");
-
-  override fun toString() = value
-}
-
-enum class HttpValue(private val value: String) {
-  ApplicationJson("$APPLICATION_JSON");
-
-  override fun toString() = value
-}
-
 
 interface HttpExchange : () -> Handler<RoutingContext> {
   companion object {
     fun staticContent(folder: String): HttpExchange = StaticContent(folder)
+
+    fun actionExecution(command: Command): HttpExchange = ActionExecution(command)
   }
 }
 
-fun String.asWebroot(): Handler<RoutingContext> = StaticHandler.create(this)
-
-fun HttpServerResponse.end(json: Json) = this.end(json.toBuffer())
-fun HttpServerResponse.end(json: Json, handler: Handler<AsyncResult<Void>>) = this.end(json.toBuffer(), handler)
-
-fun HttpServerResponse.headers(vararg headers: Pair<HttpHeader, HttpValue>) = this.apply {
-  headers.forEach { (header, value) -> this.putHeader("$header", "$value") }
-}
-
 internal class StaticContent(private val folder: String) : HttpExchange {
-  override fun invoke() = folder.asWebroot()
+  override fun invoke(): StaticHandler = StaticHandler.create(folder)
 }
+
+internal class ActionExecution(private val command: Command) : HttpExchange {
+  override fun invoke() = Handler<RoutingContext> {
+    it.request().bodyHandler { buffer ->
+      it.response()
+        .headers(
+          ContentType to ApplicationJson
+        )
+        .end(
+          json(
+            "actionId" to command(it.params["action"], buffer.asJson)
+          )
+        )
+    }
+  }
+}
+
+private val Buffer.asJson get() = this.toJsonObject()
+
+private val RoutingContext.params get() = this.request().params()
