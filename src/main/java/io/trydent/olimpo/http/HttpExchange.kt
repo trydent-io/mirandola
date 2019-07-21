@@ -1,6 +1,6 @@
 package io.trydent.olimpo.http
 
-import io.trydent.olimpo.dispatch.Command
+import io.trydent.olimpo.dispatch.AsyncCommand
 import io.trydent.olimpo.vertx.HttpHeader.*
 import io.trydent.olimpo.vertx.HttpValue.*
 import io.trydent.olimpo.vertx.end
@@ -15,7 +15,7 @@ interface HttpExchange : () -> Handler<RoutingContext> {
   companion object {
     fun staticContent(folder: String): HttpExchange = StaticContent(folder)
 
-    fun actionExecution(command: Command): HttpExchange = ActionExecution(command)
+    fun actionExecution(command: AsyncCommand): HttpExchange = ActionExecution(command)
   }
 }
 
@@ -23,7 +23,7 @@ internal class StaticContent(private val folder: String) : HttpExchange {
   override fun invoke(): StaticHandler = StaticHandler.create(folder)
 }
 
-internal class ActionExecution(private val command: Command) : HttpExchange {
+internal class ActionExecution(private val command: AsyncCommand) : HttpExchange {
   override fun invoke() = Handler<RoutingContext> {
     it.request().bodyHandler { buffer ->
       it.response()

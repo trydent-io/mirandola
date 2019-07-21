@@ -1,20 +1,17 @@
 package io.trydent.olimpo.http
 
 import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
 import io.restassured.RestAssured
 import io.restassured.http.ContentType
 import io.trydent.olimpo.apollo.Id
-import io.trydent.olimpo.dispatch.Command
-import io.trydent.olimpo.dispatch.CommandId
+import io.trydent.olimpo.dispatch.BusCommand
+import io.trydent.olimpo.dispatch.AsyncCommand
 import io.trydent.olimpo.io.Port
 import io.trydent.olimpo.test.json
 import io.trydent.olimpo.vertx.json
+import io.vertx.core.Promise
+import io.vertx.core.Promise.*
 import io.vertx.core.Vertx
-import io.vertx.core.buffer.Buffer
-import io.vertx.core.http.HttpServerResponse
-import io.vertx.ext.web.RoutingContext
 import io.vertx.junit5.VertxExtension
 import org.hamcrest.CoreMatchers
 import org.junit.jupiter.api.Test
@@ -22,7 +19,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(VertxExtension::class)
 internal class ActionExecutionIT(vertx: Vertx) {
-  private val command: Command = mockk()
+  private val command: AsyncCommand = BusCommand(vertx.eventBus())
 
   private val httpServer = HttpServer.httpServer(
     vertx,
@@ -46,7 +43,7 @@ internal class ActionExecutionIT(vertx: Vertx) {
           "putIn" to 1000.0
         )
       )
-    } returns Id.uuid()
+    } returns promise()
 
     httpServer(Port.portOrDie(8090))
 

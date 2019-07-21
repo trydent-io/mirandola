@@ -20,8 +20,8 @@ enum class HttpValue(private val value: String) {
   override fun toString() = value
 }
 
-fun Route.consumes(value: HttpValue) = this.consumes("$value")
-fun Route.produces(value: HttpValue) = this.produces("$value")
+fun Route.consumes(value: HttpValue): Route = this.consumes("$value")
+fun Route.produces(value: HttpValue): Route = this.produces("$value")
 
 fun HttpServerResponse.end(json: Json) = this.end(json.toBuffer())
 fun HttpServerResponse.end(json: Json, handler: Handler<AsyncResult<Void>>) = this.end(json.toBuffer(), handler)

@@ -3,7 +3,7 @@ package io.trydent.olimpo.apollo
 import io.trydent.olimpo.http.HttpExchange
 import io.trydent.olimpo.http.HttpRoute
 import io.trydent.olimpo.vertx.HttpValue.ApplicationJson
-import io.trydent.olimpo.http.produces
+import io.trydent.olimpo.vertx.produces
 import io.vertx.ext.web.Router
 import org.slf4j.LoggerFactory.getLogger
 
