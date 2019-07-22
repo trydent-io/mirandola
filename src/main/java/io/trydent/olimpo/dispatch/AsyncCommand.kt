@@ -4,32 +4,35 @@ import io.trydent.olimpo.apollo.Id
 import io.trydent.olimpo.apollo.Id.Companion.id
 import io.trydent.olimpo.vertx.Json
 import io.vertx.core.AsyncResult
-import io.vertx.core.Future.failedFuture
 import io.vertx.core.Promise
 import io.vertx.core.Promise.promise
 import io.vertx.core.eventbus.EventBus
 import io.vertx.core.eventbus.Message
 import io.vertx.core.json.JsonObject
 import org.slf4j.LoggerFactory.getLogger
+import java.lang.RuntimeException
 
-interface AsyncCommand : (String, Json) -> Promise<Id>
-interface Event : (String, Json) -> Unit
+interface AsyncCommand : (String, Json) -> Promise<Id> {
+  companion object {
+    fun busCommand(bus: EventBus): AsyncCommand = BusCommand(bus)
+  }
+}
 
-class BusCommand(private val bus: EventBus) : AsyncCommand {
+internal class BusCommand(private val bus: EventBus) : AsyncCommand {
   private val log = getLogger(javaClass)
 
   override fun invoke(name: String, params: Json): Promise<Id> {
     val promise = promise<Id>()
-    bus.request<Json>("$name-command", params) {
+    val commandName = "$name-command"
+    bus.request<Json>(commandName, params) {
       when {
-        it.succeeded() -> {
-          log.info("Command `$name` has started to process ${it.id}.")
-          promise.complete(id(it.id))
+        it.succeeded() -> it.id.apply {
+          log.info("Command `$commandName` has started to process ${this}.")
+          promise.complete(id(this))
         }
-        it.failed() -> {
-          val message = "Command `$name` has failed: ${it.cause().message}."
-          log.info(message)
-          promise.fail(message)
+        it.failed() -> "Command `$commandName` has failed: ${it.cause().message}.".apply {
+          log.info(this)
+          promise.fail(RuntimeException(this))
         }
       }
     }

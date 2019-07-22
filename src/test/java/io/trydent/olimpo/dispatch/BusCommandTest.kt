@@ -52,7 +52,7 @@ internal class BusCommandIT(vertx: Vertx) {
       test.completeNow()
     }
 
-    val future = command("command-name", json()).future().compose { res ->
+    command("command-name", json()).future().compose { res ->
       assertThat(res()).isEqualTo("uuid")
       //test.awaitCompletion(6, SECONDS)
       succeededFuture<Json>()
