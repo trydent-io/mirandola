@@ -14,7 +14,7 @@ internal class HttpRequestServerTest(vertx: Vertx) {
   private val port: Port = port(8090)!!
   private val httpServer = HttpRequestServer(
     vertx,
-    HttpSwitch(
+    HttpRouteSwitch(
       vertx,
       WebrootRoute(
         path = "/*",

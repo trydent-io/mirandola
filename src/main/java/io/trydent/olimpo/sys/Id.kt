@@ -1,4 +1,4 @@
-package io.trydent.olimpo.apollo
+package io.trydent.olimpo.sys
 
 import java.util.UUID.randomUUID
 

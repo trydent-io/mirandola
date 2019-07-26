@@ -2,11 +2,10 @@ package io.trydent.olimpo.http
 
 import io.restassured.RestAssured.given
 import io.restassured.http.ContentType.JSON
-import io.restassured.matcher.ResponseAwareMatcher
-import io.trydent.olimpo.apollo.Id.Companion.id
-import io.trydent.olimpo.apollo.Id.Companion.uuid
-import io.trydent.olimpo.dispatch.AsyncCommand.Companion.busCommand
-import io.trydent.olimpo.http.HttpExchange.Companion.actionExecution
+import io.trydent.olimpo.action.Action.Companion.busCommand
+import io.trydent.olimpo.sys.Id.Companion.id
+import io.trydent.olimpo.bus.Task.Companion.command
+import io.trydent.olimpo.http.HttpExchange.Companion.actionSwitch
 import io.trydent.olimpo.http.HttpRequest.Companion.single
 import io.trydent.olimpo.http.HttpRoute.Companion.action
 import io.trydent.olimpo.http.HttpServer.Companion.httpServer
@@ -19,14 +18,9 @@ import io.vertx.core.Vertx
 import io.vertx.junit5.Timeout
 import io.vertx.junit5.VertxExtension
 import io.vertx.junit5.VertxTestContext
-import org.hamcrest.CoreMatchers
-import org.hamcrest.CoreMatchers.notNullValue
-import org.hamcrest.Matcher
-import org.hamcrest.text.MatchesPattern
 import org.hamcrest.text.MatchesPattern.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeUnit.SECONDS
 
 @ExtendWith(VertxExtension::class)
@@ -38,7 +32,7 @@ internal class HttpActionIT(vertx: Vertx) {
       vertx,
       route = action(
         path = "/api/apollo/:action",
-        exchange = actionExecution(
+        exchange = actionSwitch(
           busCommand(bus)
         )
       )
