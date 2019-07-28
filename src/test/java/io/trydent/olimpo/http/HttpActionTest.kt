@@ -4,7 +4,6 @@ import io.restassured.RestAssured.given
 import io.restassured.http.ContentType.JSON
 import io.trydent.olimpo.action.Action.Companion.busCommand
 import io.trydent.olimpo.sys.Id.Companion.id
-import io.trydent.olimpo.bus.Task.Companion.command
 import io.trydent.olimpo.http.HttpExchange.Companion.actionSwitch
 import io.trydent.olimpo.http.HttpRequest.Companion.single
 import io.trydent.olimpo.http.HttpRoute.Companion.action
@@ -12,8 +11,7 @@ import io.trydent.olimpo.http.HttpServer.Companion.httpServer
 import io.trydent.olimpo.io.Port.Companion.portOrDie
 import io.trydent.olimpo.test.isPresent
 import io.trydent.olimpo.test.json
-import io.trydent.olimpo.vertx.Json
-import io.trydent.olimpo.vertx.json
+import io.trydent.olimpo.vertx.json.Json
 import io.vertx.core.Vertx
 import io.vertx.junit5.Timeout
 import io.vertx.junit5.VertxExtension

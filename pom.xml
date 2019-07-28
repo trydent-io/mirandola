@@ -12,8 +12,7 @@
   <properties>
     <project-name>olimpo</project-name>
     <java.version>11</java.version>
-    <kotlin.version>1.3.41</kotlin.version>
-    <kotlin-jvm-target.version>11</kotlin-jvm-target.version>
+    <minimum-maven.version>3.3.9</minimum-maven.version>
     <main-verticle>io.trydent.olimpo.http.HttpServerVerticle</main-verticle>
     <main-launcher>io.trydent.olimpo.OlimpoKt</main-launcher>
 
@@ -21,16 +20,12 @@
     <slf4j.version>2.0.0-alpha0</slf4j.version>
     <vertx.version>3.8.0</vertx.version>
 
-    <fabric-sdk-java.version>1.4.3</fabric-sdk-java.version>
-    <jackson-module-kotlin.version>2.9.9</jackson-module-kotlin.version>
-
     <assertj.version>3.12.2</assertj.version>
-    <junit.version>5.5.1</junit.version>
     <awaitility.version>4.0.0-rc1</awaitility.version>
-    <kafka.version>2.2.0</kafka.version>
-    <kafka-junit5.version>3.1.1</kafka-junit5.version>
-    <mockk.version>1.9.3</mockk.version>
     <jimfs.version>1.1</jimfs.version>
+    <junit.version>5.5.1</junit.version>
+    <mockito.version>3.0.0</mockito.version>
+    <rest-assured.version>4.0.0</rest-assured.version>
 
     <plugin-clean.version>3.1.0</plugin-clean.version>
     <plugin-compiler.version>3.8.0</plugin-compiler.version>
@@ -45,23 +40,12 @@
     <plugin-surefire.version>3.0.0-M3</plugin-surefire.version>
     <plugin-versions.version>2.7</plugin-versions.version>
     <plugin-vertx.version>1.0.18</plugin-vertx.version>
-    <system-rules.version>1.19.0</system-rules.version>
   </properties>
 
   <dependencies>
     <dependency>
-      <groupId>org.jetbrains.kotlin</groupId>
-      <artifactId>kotlin-stdlib-jdk8</artifactId>
-      <version>${kotlin.version}</version>
-    </dependency>
-    <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-web</artifactId>
-      <version>${vertx.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-rx-java2</artifactId>
       <version>${vertx.version}</version>
     </dependency>
     <dependency>
@@ -85,22 +69,11 @@
         </exclusion>
       </exclusions>
     </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.module</groupId>
-      <artifactId>jackson-module-kotlin</artifactId>
-      <version>${jackson-module-kotlin.version}</version>
-    </dependency>
     <!-- TEST DEPENDENCIES  -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
       <version>${junit.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.github.stefanbirkner</groupId>
-      <artifactId>system-rules</artifactId>
-      <version>${system-rules.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -116,20 +89,15 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>io.mockk</groupId>
-      <artifactId>mockk</artifactId>
-      <version>${mockk.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.jetbrains.kotlin</groupId>
-      <artifactId>kotlin-test</artifactId>
-      <version>${kotlin.version}</version>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>${mockito.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>io.rest-assured</groupId>
       <artifactId>rest-assured</artifactId>
-      <version>4.0.0</version>
+      <version>${rest-assured.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -215,30 +183,6 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.jetbrains.kotlin</groupId>
-        <artifactId>kotlin-maven-plugin</artifactId>
-        <version>${kotlin.version}</version>
-        <executions>
-          <execution>
-            <id>compile</id>
-            <phase>compile</phase>
-            <goals>
-              <goal>compile</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>test-compile</id>
-            <phase>test-compile</phase>
-            <goals>
-              <goal>test-compile</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <jvmTarget>${kotlin-jvm-target.version}</jvmTarget>
-        </configuration>
-      </plugin>
-      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>${plugin-compiler.version}</version>
@@ -277,7 +221,7 @@
             <configuration>
               <rules>
                 <requireMavenVersion>
-                  <version>3.3.9</version>
+                  <version>${minimum-maven.version}</version>
                 </requireMavenVersion>
               </rules>
             </configuration>

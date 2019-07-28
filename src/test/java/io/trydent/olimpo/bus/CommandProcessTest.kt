@@ -4,8 +4,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import io.trydent.olimpo.sys.Id.Companion.id
-import io.trydent.olimpo.vertx.Json
-import io.trydent.olimpo.vertx.json
+import io.trydent.olimpo.vertx.json.Json
 import io.vertx.core.eventbus.EventBus
 import io.vertx.core.eventbus.MessageConsumer
 import org.junit.jupiter.api.Test
