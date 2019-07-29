@@ -14,7 +14,7 @@
     <java.version>11</java.version>
     <minimum-maven.version>3.3.9</minimum-maven.version>
     <main-verticle>io.trydent.olimpo.http.HttpServerVerticle</main-verticle>
-    <main-launcher>io.trydent.olimpo.OlimpoKt</main-launcher>
+    <main-launcher>io.trydent.olimpo.Olimpo</main-launcher>
 
     <log4j.version>2.12.0</log4j.version>
     <slf4j.version>2.0.0-alpha0</slf4j.version>
@@ -28,11 +28,11 @@
     <rest-assured.version>4.0.0</rest-assured.version>
 
     <plugin-clean.version>3.1.0</plugin-clean.version>
-    <plugin-compiler.version>3.8.0</plugin-compiler.version>
+    <plugin-compiler.version>3.8.1</plugin-compiler.version>
     <plugin-deploy.version>3.0.0-M1</plugin-deploy.version>
     <plugin-enforcer.version>3.0.0-M2</plugin-enforcer.version>
     <plugin-heroku.version>2.0.10</plugin-heroku.version>
-    <plugin-jar.version>3.1.1</plugin-jar.version>
+    <plugin-jar.version>3.1.2</plugin-jar.version>
     <plugin-install.version>3.0.0-M1</plugin-install.version>
     <plugin-resources.version>3.1.0</plugin-resources.version>
     <plugin-shade.version>3.2.1</plugin-shade.version>
