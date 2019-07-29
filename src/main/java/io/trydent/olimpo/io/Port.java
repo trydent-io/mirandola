@@ -17,7 +17,7 @@ public interface Port extends Type.AsInt {
   static Optional<Port> port(int value) {
     return Optional.of(value)
       .filter(it -> it > 0)
-      .map(PortImpl::new);
+      .map(SimplePort::new);
   }
 
   static Port portOrDie(int port) {
@@ -25,16 +25,21 @@ public interface Port extends Type.AsInt {
   }
 }
 
-final class PortImpl implements Port {
+final class SimplePort implements Port {
   private final int port;
 
-  PortImpl(final int port) {
+  SimplePort(final int port) {
     this.port = port;
   }
 
   @Override
   public final int get() {
     return port;
+  }
+
+  @Override
+  public String toString() {
+    return String.valueOf(get());
   }
 }
 
@@ -54,8 +59,13 @@ final class EnvPort implements Port {
     try {
       return Integer.parseInt(property.get());
     } catch (NumberFormatException nfe) {
-      log.warn("Provided port is not a number.");
+      log.warn("Provided port `{}` is not a number.", property.get());
       return orDefault.get();
     }
+  }
+
+  @Override
+  public String toString() {
+    return String.valueOf(get());
   }
 }
