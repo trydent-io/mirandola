@@ -1,22 +1,31 @@
-package io.trydent.olimpo.io
+package io.trydent.olimpo.io;
 
-import io.vertx.core.Vertx.vertx
-import io.vertx.core.buffer.Buffer.buffer
-import org.assertj.core.api.Assertions.assertThat
-import org.awaitility.Awaitility.await
-import org.junit.jupiter.api.Test
+import io.vertx.core.Vertx;
+import io.vertx.core.file.FileSystem;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
-internal class FileResourceTest {
-  private val vertx = vertx()
-  private val fileSystem = vertx.fileSystem()
+import static io.vertx.core.buffer.Buffer.buffer;
+import static org.assertj.core.api.Assertions.assertThat;
 
-  @Test
-  internal fun `should read a file from resources folder`() {
-    val resource: FileResource = ResourceFile(file = "resource.file")
+class FileResourceTest {
+  private final Vertx vertx;
+  private final FileSystem fileSystem;
 
-    assertThat(resource().result()).isEqualTo(buffer("nothing\n"))
+  FileResourceTest(Vertx vertx) {
+    this.vertx = vertx;
+    this.fileSystem = vertx.fileSystem();
   }
 
+  @Test
+  @DisplayName("should read a file from resources folder")
+  void shouldReadFileFromResources() {
+    final var resource = new ResourceFile("resource.file");
+
+    assertThat(resource.get().future().result()).isEqualTo(buffer("nothing\n"));
+  }
+
+  /*
   @Test
   internal fun `should read a file from file-system`() {
     val tmp = System.getProperty("java.io.tmpdir")
@@ -27,5 +36,5 @@ internal class FileResourceTest {
     val future = fsFile()
     await().until(future::isComplete)
     assertThat(future.result()).isEqualTo(buffer("blabla"))
-  }
+  }*/
 }
