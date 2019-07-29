@@ -1,12 +1,10 @@
 package io.trydent.olimpo.http;
 
 import io.trydent.olimpo.action.Action;
-import io.trydent.olimpo.sys.Id;
 import io.trydent.olimpo.type.Type;
+import io.trydent.olimpo.vertx.json.Json;
 import io.trydent.olimpo.vertx.json.JsonBuffer;
-import io.vertx.core.Future;
 import io.vertx.core.Handler;
-import io.vertx.core.Promise;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.StaticHandler;
 import org.slf4j.Logger;
@@ -17,17 +15,16 @@ import static io.trydent.olimpo.vertx.json.Json.Field.field;
 import static io.trydent.olimpo.vertx.json.Json.json;
 import static io.trydent.olimpo.vertx.json.JsonBuffer.jsonBuffer;
 import static java.util.Arrays.copyOf;
-import static java.util.Arrays.stream;
 import static org.slf4j.LoggerFactory.getLogger;
 
 public interface HttpExchange extends Type.As<Handler<RoutingContext>> {
-    static HttpExchange staticContent(String folder) {
-      return new StaticContent(folder);
-    }
+  static HttpExchange staticContent(String folder) {
+    return new StaticContent(folder);
+  }
 
-    static HttpExchange actionSwitch(Action... actions) {
-      return new ActionSwitch(copyOf(actions, actions.length));
-    }
+  static HttpExchange actionSwitch(Action... actions) {
+    return new ActionSwitch(copyOf(actions, actions.length));
+  }
 }
 
 final class StaticContent implements HttpExchange {
@@ -54,32 +51,23 @@ final class ActionSwitch implements HttpExchange {
 
   @Override
   public final Handler<RoutingContext> get() {
-    return routing -> {
-      routing.request().bodyHandler(buffer -> {
-        stream(actions)
-          .map(action -> action.apply(routing.pathParam("action"), json(buffer)))
-          .map(Promise::future)
-          .filter(Future::succeeded)
-          .findFirst()
-          .ifPresent(future ->
-            asyncResponse(
-              routing,
-              future
-            )
-          );
-      });
-    };
+    return routing -> routing.request().bodyHandler(buffer -> {
+      for (var action : actions) asyncResponse(routing, action, json(buffer));
+    });
   }
 
-  private void asyncResponse(RoutingContext routing, Future<Id> future) {
-    future.setHandler(async ->
-      response(
-        routing,
-        jsonBuffer(
-          field("actionId", async.result().get())
+  private void asyncResponse(RoutingContext routing, Action action, Json json) {
+    action
+      .apply(routing.pathParam("action"), json)
+      .future()
+      .setHandler(async ->
+        response(
+          routing,
+          jsonBuffer(
+            field("actionId", async.result().get())
+          )
         )
-      )
-    );
+      );
   }
 
   private void response(RoutingContext routing, JsonBuffer json) {

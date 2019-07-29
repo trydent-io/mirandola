@@ -10,7 +10,9 @@ import static io.trydent.olimpo.vertx.json.Json.Field.field;
 import static io.trydent.olimpo.vertx.json.Json.json;
 
 public interface Process extends BiConsumer<String, Execution> {
-
+  static Process commandProcess(Id id, EventBus bus) {
+    return new CommandProcess(id, bus);
+  }
 }
 
 final class CommandProcess implements Process {

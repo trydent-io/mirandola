@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import static io.trydent.olimpo.sys.Id.id;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -21,7 +22,7 @@ class CommandProcessTest {
   @Test
   @DisplayName("should execute a command")
   void shouldExecuteCommand() {
-    when(eventBus.<JsonObject>localConsumer("any-command", any())).thenReturn(consumer);
+    when(eventBus.<JsonObject>localConsumer(eq("any-command"), any())).thenReturn(consumer);
 
     final var id = id("process-id");
     final var process = new CommandProcess(
@@ -31,6 +32,6 @@ class CommandProcessTest {
 
     process.accept("any-command", params -> {});
 
-    verify(eventBus).<JsonObject>localConsumer("any-command", any());
+    verify(eventBus).<JsonObject>localConsumer(eq("any-command"), any());
   }
 }

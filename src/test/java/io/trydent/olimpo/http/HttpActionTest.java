@@ -53,7 +53,7 @@ class HttpActionIT {
     httpServer.accept(portOrDie(8090));
 
     final var json = json(
-      field("actionId", "abd94004-6f46-4a12-b28d-ec9be66a6089")
+      field("id", "abd94004-6f46-4a12-b28d-ec9be66a6089")
     );
 
     bus.<JsonObject>localConsumer("any-action-command", it -> {

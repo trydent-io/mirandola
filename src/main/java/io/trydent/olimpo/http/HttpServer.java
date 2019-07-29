@@ -30,7 +30,7 @@ final class HttpRequestServer implements HttpServer {
   public final void accept(Port port) {
     vertx
       .createHttpServer()
-      .requestHandler(request.run())
+      .requestHandler(request.get())
       .listen(port.get(), async -> when(async.succeeded(),
         () -> log.info("Http Server started on port {}.", port),
         () -> log.error("Http Server failed to start on port {}.", port)

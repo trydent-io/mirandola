@@ -5,12 +5,16 @@ import io.trydent.olimpo.type.Type;
 import java.util.Arrays;
 
 public interface JsonString extends Type.AsString {
-  static JsonString stringJson(Json.Field<String, ?>... fields) {
+  @SafeVarargs
+  static JsonString jsonString(Json.Field<String, ?>... fields) {
     return new JsonStringImpl(
       new JsonImpl(
         Arrays.copyOf(fields, fields.length)
       )
     );
+  }
+  static JsonString jsonString(Json json) {
+    return new JsonStringImpl(json);
   }
 }
 
