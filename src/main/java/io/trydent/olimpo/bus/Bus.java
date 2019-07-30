@@ -1,11 +1,27 @@
 package io.trydent.olimpo.bus;
 
+import io.trydent.olimpo.sys.Id;
+import io.vertx.core.eventbus.EventBus;
+
 import java.util.Arrays;
 
 public interface Bus extends Runnable {
-  static Bus commandBus(final Process process, final Command... commands) {
-    return new CommandBus(process, Arrays.copyOf(commands, commands.length));
+  static Bus commandBus(final EventBus bus, final Command... commands) {
+    return new CommandBus(
+      new CommandProcess(
+        Id.uuid(),
+        bus
+      ),
+      Arrays.copyOf(commands, commands.length)
+    );
   }
+
+  @Override
+  default void run() {
+    this.listen();
+  }
+
+  void listen();
 }
 
 final class CommandBus implements Bus {
@@ -18,10 +34,9 @@ final class CommandBus implements Bus {
   }
 
   @Override
-  public final void run() {
+  public final void listen() {
     for (var command : commands) {
-      command.accept(process);
+      command.executedBy(process);
     }
-
   }
 }

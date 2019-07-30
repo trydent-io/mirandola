@@ -14,26 +14,35 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 @FunctionalInterface
 public interface Deployment extends Consumer<Vertx> {
-  static Deploy deploy(Deployment... deployments) {
-    return new Deploy(
+  static Verticles verticles(Deployment... deployments) {
+    return new DeploymentVerticles(
       vertx(),
       Arrays.copyOf(deployments, deployments.length)
     );
   }
 
-  final class Deploy implements Runnable {
-    private static final Logger log = getLogger(Deploy.class);
+  interface Verticles extends Runnable {
+    @Override
+    default void run() {
+      this.deploy();
+    }
+
+    void deploy();
+  }
+
+  final class DeploymentVerticles implements Verticles {
+    private static final Logger log = getLogger(DeploymentVerticles.class);
 
     private final Vertx vertx;
     private final Deployment[] deployments;
 
-    private Deploy(final Vertx vertx, final Deployment[] deployments) {
+    private DeploymentVerticles(final Vertx vertx, final Deployment[] deployments) {
       this.vertx = vertx;
       this.deployments = deployments;
     }
 
     @Override
-    public final void run() {
+    public final void deploy() {
       for (var deployment : deployments) {
         vertx.deployVerticle(new DeployedVerticle(deployment), async -> when(async.succeeded(),
           () -> log.info("Verticle ${service.javaClass.name} deployed."),

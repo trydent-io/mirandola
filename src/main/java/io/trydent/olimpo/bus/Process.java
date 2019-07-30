@@ -13,6 +13,13 @@ public interface Process extends BiConsumer<String, Execution> {
   static Process commandProcess(Id id, EventBus bus) {
     return new CommandProcess(id, bus);
   }
+
+  @Override
+  default void accept(String name, Execution execution) {
+    consume(name, execution);
+  }
+
+  void consume(String name, Execution execution);
 }
 
 final class CommandProcess implements Process {
@@ -25,14 +32,14 @@ final class CommandProcess implements Process {
   }
 
   @Override
-  public final void accept(String name, Execution execution) {
+  public final void consume(String name, Execution execution) {
     bus.<JsonObject>localConsumer(name, message -> {
       message.reply(
         json(
           field("id", id.get())
         ).get()
       );
-      execution.accept(message.body());
+      execution.execute(message.body());
       bus.publish(name.replaceAll("command", "processed"), new JsonObject());
     });
   }

@@ -8,8 +8,8 @@ import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 
 public interface ApolloCommand extends Command {
-  static Command addReading() {
-    return new AddReading(null);
+  static Command addReading(final DbmsClient client) {
+    return new AddReading(client);
   }
 }
 
@@ -23,8 +23,8 @@ final class AddReading implements Command {
   }
 
   @Override
-  public final void accept(final Process process) {
+  public final void executedBy(final Process process) {
     final var client = dbmsClient.get();
-    process.accept(ADD_READING, json -> client.close());
+    process.consume(ADD_READING, json -> client.close());
   }
 }

@@ -8,10 +8,17 @@ import io.vertx.ext.jdbc.JDBCClient;
 import io.vertx.ext.sql.SQLClient;
 
 import static io.trydent.olimpo.sys.Lazy.lazy;
+import static io.trydent.olimpo.vertx.json.Json.Field.field;
+import static io.trydent.olimpo.vertx.json.Json.json;
 
 public interface DbmsClient extends Type.As<SQLClient> {
-  static DbmsClient database(final Vertx vertx, final Json params) {
+  static DbmsClient dbmsClient(final Vertx vertx, final Json params) {
     return new SimpleDbmsClient(vertx, params);
+  }
+  static DbmsClient dbmsClient(final Vertx vertx, final String url) {
+    return dbmsClient(vertx, json(
+      field("url", url)
+    ));
   }
 }
 
