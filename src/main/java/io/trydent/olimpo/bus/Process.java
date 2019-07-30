@@ -33,6 +33,7 @@ final class CommandProcess implements Process {
         ).get()
       );
       execution.accept(message.body());
+      bus.publish(name.replaceAll("command", "processed"), new JsonObject());
     });
   }
 }

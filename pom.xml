@@ -40,6 +40,7 @@
     <plugin-surefire.version>3.0.0-M3</plugin-surefire.version>
     <plugin-versions.version>2.7</plugin-versions.version>
     <plugin-vertx.version>1.0.18</plugin-vertx.version>
+    <h2.version>1.4.199</h2.version>
   </properties>
 
   <dependencies>
@@ -50,7 +51,7 @@
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
-      <artifactId>vertx-auth-jwt</artifactId>
+      <artifactId>vertx-jdbc-client</artifactId>
       <version>${vertx.version}</version>
     </dependency>
     <dependency>
@@ -110,6 +111,13 @@
       <groupId>com.google.jimfs</groupId>
       <artifactId>jimfs</artifactId>
       <version>${jimfs.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>${h2.version}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
