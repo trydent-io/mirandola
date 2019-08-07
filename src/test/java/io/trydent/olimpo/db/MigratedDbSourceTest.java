@@ -5,6 +5,7 @@ import io.vertx.junit5.Timeout;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
 import org.h2.Driver;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -20,6 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class MigratedDbSourceTest {
 
   @Test
+  @Disabled
   @Timeout(value = 6, timeUnit = SECONDS)
   void shouldMigrate(Vertx vertx, VertxTestContext test) {
     final var dbClient = dbClient(

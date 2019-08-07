@@ -32,10 +32,10 @@ class HttpRequestServerTest {
   @Test
   @DisplayName("should start Server")
   void shouldStartServer() {
-    httpServer.listen(portOrDie(8140));
+    httpServer.listen(portOrDie(8141));
 
     given()
-      .port(8140)
+      .port(8141)
       .get()
     .then()
       .statusCode(200)
