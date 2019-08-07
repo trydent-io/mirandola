@@ -21,8 +21,9 @@
     <vertx.version>4.0.0-milestone1</vertx.version>
     <postgresql.version>42.2.6</postgresql.version>
     <hikari.version>3.3.1</hikari.version>
+    <flyway.version>6.0.0-beta2</flyway.version>
 
-    <assertj.version>3.13.0</assertj.version>
+    <assertj.version>3.13.2</assertj.version>
     <awaitility.version>4.0.0-rc1</awaitility.version>
     <jimfs.version>1.1</jimfs.version>
     <junit.version>5.5.1</junit.version>
@@ -81,6 +82,11 @@
       <groupId>com.zaxxer</groupId>
       <artifactId>HikariCP</artifactId>
       <version>${hikari.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.flywaydb</groupId>
+      <artifactId>flyway-core</artifactId>
+      <version>${flyway.version}</version>
     </dependency>
     <!-- TEST DEPENDENCIES  -->
     <dependency>

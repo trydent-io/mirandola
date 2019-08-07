@@ -12,49 +12,54 @@ import static io.trydent.olimpo.sys.Property.envVar;
 import static java.lang.String.format;
 
 public interface DbParams extends Json {
-  static DbParams postgresqlParams(final Property property) {
-    return new PostgresqlParams(
+  static DbParams postgresParams(final Property property) {
+    return new JdbcParams<>(
       property,
       Driver.class,
-      "jdbc:postgresql://%s:%d%s"
+      "jdbc:postgresql://%s:%d%s",
+      "(postgres)://([A-Za-z0-9])\\w+:([A-Za-z0-9])\\w+@([A-Za-z0-9-.]+):([0-9]{4})/([A-Za-z0-9])\\w+"
     );
   }
-  static DbParams envPostgresql(final String envVar) {
-    return postgresqlParams(envVar(envVar));
+  static DbParams envPostgres(final String envVar) {
+    return postgresParams(envVar(envVar));
+  }
+
+  static <D extends java.sql.Driver> DbParams jdbcUrl(final String jdbcUrl, final Class<D> driverClass) {
+    return () -> new JsonObject()
+      .put("url", jdbcUrl)
+      .put("driver_class", driverClass.getName());
   }
 }
 
-final class PostgresqlParams implements DbParams {
-  private static final String REGEX = "(postgres)://([A-Za-z0-9])\\w+:([A-Za-z0-9])\\w+@([A-Za-z0-9-.]+):([0-9]{4})/([A-Za-z0-9])\\w+";
-
+final class JdbcParams<D extends java.sql.Driver> implements DbParams {
   private final Property property;
-  private final Class<Driver> driverClass;
+  private final Class<D> driverClass;
   private final String template;
+  private final String regex;
 
-  PostgresqlParams(final Property property, final Class<Driver> driverClass, final String template) {
+  JdbcParams(final Property property, final Class<D> driverClass, final String template, final String regex) {
     this.property = property;
     this.driverClass = driverClass;
     this.template = template;
+    this.regex = regex;
   }
 
   @Override
   public final JsonObject get() {
     try {
-      final var url = property.get();
-      if (url.matches(REGEX)) {
-        final var uri = new URI(url);
-        final var userInfo = uri.getUserInfo().split(":");
+      if (!property.get().matches(regex)) return null;
 
-        return new JsonObject()
-          .put("url", format(template, uri.getHost(), uri.getPort(), uri.getPath()))
-          .put("user", userInfo[0])
-          .put("password", userInfo[1])
-          .put("driver_class", driverClass.getName());
-      }
+      final var uri = new URI(property.get());
+      final var userInfo = uri.getUserInfo().split(":");
+
+      return new JsonObject()
+        .put("url", format(template, uri.getHost(), uri.getPort(), uri.getPath()))
+        .put("user", userInfo[0])
+        .put("password", userInfo[1])
+        .put("driver_class", driverClass.getName());
     } catch (URISyntaxException e) {
       e.printStackTrace();
       return null;
     }
-    return null;
   }
 }

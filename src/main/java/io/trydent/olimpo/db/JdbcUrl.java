@@ -1,4 +1,4 @@
-package io.trydent.olimpo.io;
+package io.trydent.olimpo.db;
 
 import io.trydent.olimpo.sys.Property;
 import io.trydent.olimpo.type.Type;

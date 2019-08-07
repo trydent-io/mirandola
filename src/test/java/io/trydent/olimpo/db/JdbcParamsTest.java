@@ -10,9 +10,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class PostgresqlParamsTest {
+class JdbcParamsTest {
   private final Property property = mock(Property.class);
-  private final DbParams params = new PostgresqlParams(property, Driver.class, "jdbc:postgresql://%s:%d%s");
+  private final DbParams params = new JdbcParams<>(property, Driver.class, "jdbc:postgresql://%s:%d%s", "(postgres)://([A-Za-z0-9])\\w+:([A-Za-z0-9])\\w+@([A-Za-z0-9-.]+):([0-9]{4})/([A-Za-z0-9])\\w+");
 
   @Test
   @DisplayName("should get dbms params for PostgreSQL")

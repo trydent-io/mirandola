@@ -15,14 +15,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import static io.trydent.olimpo.action.Action.commandAction;
 import static io.trydent.olimpo.apollo.ApolloCommand.addReading;
-import static io.trydent.olimpo.db.DbClient.*;
+import static io.trydent.olimpo.db.DbClient.dbClient;
+import static io.trydent.olimpo.db.DbParams.jdbcUrl;
 import static io.trydent.olimpo.sink.CommandSink.commandBus;
 import static io.trydent.olimpo.sys.Id.id;
 import static io.trydent.olimpo.vertx.json.Json.Field.field;
 import static io.trydent.olimpo.vertx.json.Json.json;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 
 @ExtendWith(VertxExtension.class)
 class AddReadingIT {
@@ -35,7 +35,7 @@ class AddReadingIT {
     this.bus = vertx.eventBus();
     this.commandBus = commandBus(vertx.eventBus(), id("plainId"));
     this.action = commandAction(bus);
-    this.dbClient = dbClient(vertx, "jdbc:h2:mem:test");
+    this.dbClient = dbClient(vertx, jdbcUrl("jdbc:h2:mem:test", org.h2.Driver.class));
   }
 
 

@@ -1,6 +1,5 @@
 package io.trydent.olimpo.db;
 
-import io.trydent.olimpo.io.JdbcUrl;
 import io.trydent.olimpo.sys.Lazy;
 import io.trydent.olimpo.type.Type;
 import io.trydent.olimpo.vertx.json.Json;
@@ -24,6 +23,9 @@ public interface DbClient extends Type.As<SQLClient> {
       field("url", url)
     ));
   }
+  static DbClient dbClient(final Vertx vertx, final DbSource dbSource) {
+    return new LazyDbClient(vertx, dbSource);
+  }
 }
 
 final class LazyDbClient implements DbClient {
@@ -32,6 +34,11 @@ final class LazyDbClient implements DbClient {
   LazyDbClient(final Vertx vertx, final Json params) {
     this(
       lazy(() -> JDBCClient.createNonShared(vertx, params.get()))
+    );
+  }
+  LazyDbClient(final Vertx vertx, final DbSource dbSource) {
+    this(
+      lazy(() -> JDBCClient.create(vertx, dbSource.get()))
     );
   }
   private LazyDbClient(Lazy<SQLClient> client) {

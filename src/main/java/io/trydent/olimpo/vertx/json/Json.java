@@ -8,6 +8,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
+
+import static java.util.stream.IntStream.*;
 
 public interface Json extends Type.As<JsonObject> {
   interface Field<String, T> extends Consumer<Map<java.lang.String, Object>> {
@@ -23,6 +26,25 @@ public interface Json extends Type.As<JsonObject> {
 
   static Json json(final Buffer buffer) {
     return new BufferJson(buffer);
+  }
+
+  static Json json(final Object... fields) {
+    return new SpreadJson(Arrays.copyOf(fields, fields.length));
+  }
+}
+
+final class SpreadJson implements Json {
+  private final Object[] fields;
+
+  SpreadJson(final Object[] fields) {
+    this.fields = fields;
+  }
+
+  @Override
+  public final JsonObject get() {
+    final var js = new JsonObject();
+    iterate(0, i -> i < fields.length, i -> i + 2).forEach(i -> js.put(fields[i].toString(), fields[i + 1]));
+    return js;
   }
 }
 
