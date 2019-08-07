@@ -1,6 +1,5 @@
 package io.trydent.olimpo.http;
 
-import io.trydent.olimpo.io.Port;
 import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxExtension;
 import org.junit.jupiter.api.DisplayName;
@@ -13,7 +12,6 @@ import static io.trydent.olimpo.io.Port.portOrDie;
 
 @ExtendWith(VertxExtension.class)
 class HttpRequestServerTest {
-  private final Port port = portOrDie(8090);
   private final HttpServer httpServer;
 
   HttpRequestServerTest(Vertx vertx) {
@@ -34,10 +32,10 @@ class HttpRequestServerTest {
   @Test
   @DisplayName("should start Server")
   void shouldStartServer() {
-    httpServer.accept(port);
+    httpServer.listen(portOrDie(8190));
 
     given()
-      .port(8090)
+      .port(8190)
       .get()
     .then()
       .statusCode(200)
