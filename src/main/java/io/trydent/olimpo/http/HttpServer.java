@@ -13,6 +13,13 @@ public interface HttpServer extends Consumer<Port> {
   static HttpServer httpServer(Vertx vertx, HttpRequest request) {
     return new HttpRequestServer(vertx, request);
   }
+
+  void listen(Port port);
+
+  @Override
+  default void accept(Port port) {
+    this.listen(port);
+  }
 }
 
 final class HttpRequestServer implements HttpServer {
@@ -27,7 +34,7 @@ final class HttpRequestServer implements HttpServer {
   }
 
   @Override
-  public final void accept(Port port) {
+  public final void listen(final Port port) {
     vertx
       .createHttpServer()
       .requestHandler(request.get())

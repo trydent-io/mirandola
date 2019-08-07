@@ -1,18 +1,19 @@
 package io.trydent.olimpo;
 
-import static io.trydent.olimpo.action.Action.busCommand;
+import static io.trydent.olimpo.action.Action.commandAction;
 import static io.trydent.olimpo.apollo.ApolloCommand.addReading;
-import static io.trydent.olimpo.bus.Bus.commandBus;
-import static io.trydent.olimpo.db.DbmsClient.dbmsClient;
+import static io.trydent.olimpo.db.SqlClient.dbmsClient;
 import static io.trydent.olimpo.http.HttpExchange.actionSwitch;
 import static io.trydent.olimpo.http.HttpExchange.staticContent;
 import static io.trydent.olimpo.http.HttpRequest.routeSwitch;
 import static io.trydent.olimpo.http.HttpRoute.action;
 import static io.trydent.olimpo.http.HttpRoute.webroot;
 import static io.trydent.olimpo.http.HttpServer.httpServer;
+import static io.trydent.olimpo.io.JdbcUrl.envJdbcUrl;
 import static io.trydent.olimpo.io.Port.envPort;
+import static io.trydent.olimpo.sink.CommandSink.commandBus;
+import static io.trydent.olimpo.sys.Id.uuid;
 import static io.trydent.olimpo.vertx.Deployment.verticles;
-import static io.trydent.olimpo.vertx.json.Json.json;
 
 public final class Olimpo {
   private Olimpo() {
@@ -31,21 +32,20 @@ public final class Olimpo {
           ),
           action("/apollo/:action",
             actionSwitch(
-              busCommand(vertx.eventBus())
+              commandAction(vertx.eventBus())
             )
           )
         )
-      ).accept(envPort("PORT", 8095)),
-      vertx ->
-        commandBus(
-          vertx.eventBus(),
+      ).listen(envPort("PORT", 8095)),
+      vertx -> commandBus(vertx.eventBus(), uuid())
+        .let("add-reading",
           addReading(
             dbmsClient(
               vertx,
-              "jdbc:h2:mem:test"
+              envJdbcUrl("DATABASE_URL")
             )
           )
-        ).listen()
+        )
     ).deploy();
   }
 }

@@ -15,14 +15,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @ExtendWith(VertxExtension.class)
-class SimpleDbmsClientTest {
-  private static final Logger log = getLogger(SimpleDbmsClientTest.class);
+class JdbcClientTest {
+  private static final Logger log = getLogger(JdbcClientTest.class);
   private static final String URL = "jdbc:h2:mem:test;MODE=PostgreSQL";
 
-  private final DbmsClient dbmsClient;
+  private final SqlClient sqlClient;
 
-  SimpleDbmsClientTest(final Vertx vertx) {
-    this.dbmsClient = new SimpleDbmsClient(
+  JdbcClientTest(final Vertx vertx) {
+    this.sqlClient = new JdbcClient(
       vertx,
       json(
         field("url", URL)
@@ -32,7 +32,7 @@ class SimpleDbmsClientTest {
 
   @BeforeEach
   void beforeEach() {
-    final var db = dbmsClient.get();
+    final var db = sqlClient.get();
     db.update("create table test(id int, field varchar(255))", async -> {
       when(async.succeeded(),
         () -> log.info("Table `temp` created."),
@@ -53,7 +53,7 @@ class SimpleDbmsClientTest {
   @Test
   @DisplayName("should get a sql-client")
   void shouldGetSqlClient() {
-    final var db = dbmsClient.get();
+    final var db = sqlClient.get();
 
     db.query("select id, field from temp", async ->
       when(async.succeeded(),
@@ -61,6 +61,6 @@ class SimpleDbmsClientTest {
         () -> log.error("Failed to retrieve rows.")
       )
     );
-    assertThat(dbmsClient.get()).isNotNull();
+    assertThat(sqlClient.get()).isNotNull();
   }
 }

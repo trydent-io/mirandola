@@ -1,31 +1,28 @@
 package io.trydent.olimpo.action;
 
 import io.trydent.olimpo.sys.Id;
-import io.trydent.olimpo.vertx.Address;
 import io.trydent.olimpo.vertx.Delivery;
-import io.trydent.olimpo.vertx.async.AsyncJsonMessage;
+import io.trydent.olimpo.vertx.Template;
 import io.trydent.olimpo.vertx.json.Json;
 import io.vertx.core.Promise;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.json.JsonObject;
+import org.slf4j.Logger;
 
 import java.util.function.BiFunction;
 
 import static io.trydent.olimpo.sys.Id.id;
-import static io.trydent.olimpo.vertx.Address.templateAddress;
 import static io.trydent.olimpo.vertx.Delivery.localDelivery;
+import static io.trydent.olimpo.vertx.Template.template;
 import static io.trydent.olimpo.vertx.async.AsyncJsonMessage.$;
-import static java.lang.String.format;
+import static org.slf4j.LoggerFactory.getLogger;
 
 public interface Action extends BiFunction<String, Json, Promise<Id>> {
-  private static Address command() {
-    return templateAddress("%s-command");
-  }
 
-  static Action busCommand(final EventBus bus) {
-    return new BusCommand(
+  static Action commandAction(final EventBus bus) {
+    return new CommandAction(
       bus,
-      command(),
+      template("%s-command"),
       localDelivery()
     );
   }
@@ -38,12 +35,14 @@ public interface Action extends BiFunction<String, Json, Promise<Id>> {
   Promise<Id> submit(String name, Json params);
 }
 
-final class BusCommand implements Action {
+final class CommandAction implements Action {
+  private static final Logger log = getLogger(CommandAction.class);
+
   private final EventBus bus;
-  private final Address command;
+  private final Template command;
   private final Delivery delivery;
 
-  BusCommand(final EventBus bus, final Address command, final Delivery delivery) {
+  CommandAction(final EventBus bus, final Template command, final Delivery delivery) {
     this.bus = bus;
     this.command = command;
     this.delivery = delivery;
@@ -52,10 +51,13 @@ final class BusCommand implements Action {
   @Override
   public final Promise<Id> submit(String name, Json params) {
     final var promise = Promise.<Id>promise();
-    bus.<JsonObject>request(command.apply(name), params.get(), delivery.get(), async -> {
+    final var commandName = command.apply(name);
+    bus.<JsonObject>request(commandName, params.get(), delivery.get(), async -> {
         if (async.succeeded()) {
-          final var $message = $(async);
-          promise.complete(id($message.stringField("id")));
+          promise.complete(id($(async).stringField("id")));
+        } else if (async.failed()) {
+          log.error("Failed to request `{}`: {}.", commandName, async.cause().getMessage());
+          promise.fail(async.cause().getMessage());
         }
       }
     );

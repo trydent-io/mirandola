@@ -12,7 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
-import static io.trydent.olimpo.action.Action.busCommand;
+import static io.trydent.olimpo.action.Action.commandAction;
 import static io.trydent.olimpo.http.HttpExchange.actionSwitch;
 import static io.trydent.olimpo.http.HttpRequest.single;
 import static io.trydent.olimpo.http.HttpRoute.action;
@@ -39,7 +39,7 @@ class HttpActionIT {
         action(
           "/api/apollo/:action",
           actionSwitch(
-            busCommand(this.bus)
+            commandAction(this.bus)
           )
         )
       )
