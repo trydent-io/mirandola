@@ -73,6 +73,7 @@ final class MigratedDbSource implements DbSource {
     final var migrated = Flyway
       .configure()
       .dataSource(dataSource)
+      .baselineOnMigrate(true)
       .load()
       .migrate();
     return dataSource;
