@@ -2,7 +2,6 @@ package io.trydent.olimpo.db;
 
 import io.trydent.olimpo.io.JdbcUrl;
 import io.trydent.olimpo.sys.Lazy;
-import io.trydent.olimpo.sys.Property;
 import io.trydent.olimpo.type.Type;
 import io.trydent.olimpo.vertx.json.Json;
 import io.vertx.core.Vertx;
@@ -13,29 +12,29 @@ import static io.trydent.olimpo.sys.Lazy.lazy;
 import static io.trydent.olimpo.vertx.json.Json.Field.field;
 import static io.trydent.olimpo.vertx.json.Json.json;
 
-public interface SqlClient extends Type.As<SQLClient> {
-  static SqlClient dbmsClient(final Vertx vertx, final Json params) {
-    return new JdbcClient(vertx, params);
+public interface DbClient extends Type.As<SQLClient> {
+  static DbClient dbClient(final Vertx vertx, final Json params) {
+    return new LazyDbClient(vertx, params);
   }
-  static SqlClient dbmsClient(final Vertx vertx, final JdbcUrl jdbcUrl) {
-    return dbmsClient(vertx, jdbcUrl.get());
+  static DbClient dbClient(final Vertx vertx, final JdbcUrl jdbcUrl) {
+    return dbClient(vertx, jdbcUrl.get());
   }
-  static SqlClient dbmsClient(final Vertx vertx, final String url) {
-    return dbmsClient(vertx, json(
+  static DbClient dbClient(final Vertx vertx, final String url) {
+    return dbClient(vertx, json(
       field("url", url)
     ));
   }
 }
 
-final class JdbcClient implements SqlClient {
+final class LazyDbClient implements DbClient {
   private final Lazy<SQLClient> client;
 
-  JdbcClient(final Vertx vertx, final Json params) {
+  LazyDbClient(final Vertx vertx, final Json params) {
     this(
       lazy(() -> JDBCClient.createNonShared(vertx, params.get()))
     );
   }
-  private JdbcClient(Lazy<SQLClient> client) {
+  private LazyDbClient(Lazy<SQLClient> client) {
     this.client = client;
   }
 

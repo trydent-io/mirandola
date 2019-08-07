@@ -1,29 +1,29 @@
 package io.trydent.olimpo.apollo;
 
 import io.trydent.olimpo.sink.Command;
-import io.trydent.olimpo.db.SqlClient;
+import io.trydent.olimpo.db.DbClient;
 import io.vertx.core.json.JsonObject;
 import org.slf4j.Logger;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
 public interface ApolloCommand extends Command {
-  static Command addReading(final SqlClient client) {
+  static Command addReading(final DbClient client) {
     return new AddReading(client);
   }
 }
 
 final class AddReading implements Command {
   private static final Logger log = getLogger(AddReading.class);
-  private final SqlClient sqlClient;
+  private final DbClient dbClient;
 
-  AddReading(final SqlClient sqlClient) {
-    this.sqlClient = sqlClient;
+  AddReading(final DbClient dbClient) {
+    this.dbClient = dbClient;
   }
 
   @Override
   public final void execute(JsonObject params) {
-    final var sqlClient = this.sqlClient.get();
+    final var sqlClient = this.dbClient.get();
     sqlClient.query("select * from dual", async -> log.info("Done something"));
   }
 }

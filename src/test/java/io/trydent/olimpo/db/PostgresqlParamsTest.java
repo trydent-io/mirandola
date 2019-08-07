@@ -12,7 +12,7 @@ import static org.mockito.Mockito.when;
 
 class PostgresqlParamsTest {
   private final Property property = mock(Property.class);
-  private final DbmsParams params = new PostgresqlParams(property, Driver.class, "jdbc:postgresql://%s:%d%s");
+  private final DbParams params = new PostgresqlParams(property, Driver.class, "jdbc:postgresql://%s:%d%s");
 
   @Test
   @DisplayName("should get dbms params for PostgreSQL")

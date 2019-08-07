@@ -1,7 +1,6 @@
 package io.trydent.olimpo.db;
 
 import io.trydent.olimpo.sys.Property;
-import io.trydent.olimpo.vertx.Template;
 import io.trydent.olimpo.vertx.json.Json;
 import io.vertx.core.json.JsonObject;
 import org.postgresql.Driver;
@@ -10,23 +9,22 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import static io.trydent.olimpo.sys.Property.envVar;
-import static io.trydent.olimpo.vertx.Template.template;
 import static java.lang.String.format;
 
-public interface DbmsParams extends Json {
-  static DbmsParams postgresqlParams(final Property property) {
+public interface DbParams extends Json {
+  static DbParams postgresqlParams(final Property property) {
     return new PostgresqlParams(
       property,
       Driver.class,
       "jdbc:postgresql://%s:%d%s"
     );
   }
-  static DbmsParams envPostgresql(final String envVar) {
+  static DbParams envPostgresql(final String envVar) {
     return postgresqlParams(envVar(envVar));
   }
 }
 
-final class PostgresqlParams implements DbmsParams {
+final class PostgresqlParams implements DbParams {
   private static final String REGEX = "(postgres)://([A-Za-z0-9])\\w+:([A-Za-z0-9])\\w+@([A-Za-z0-9-.]+):([0-9]{4})/([A-Za-z0-9])\\w+";
 
   private final Property property;

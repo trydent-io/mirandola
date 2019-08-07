@@ -15,14 +15,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @ExtendWith(VertxExtension.class)
-class JdbcClientTest {
-  private static final Logger log = getLogger(JdbcClientTest.class);
+class LazyDbClientTest {
+  private static final Logger log = getLogger(LazyDbClientTest.class);
   private static final String URL = "jdbc:h2:mem:test;MODE=PostgreSQL";
 
-  private final SqlClient sqlClient;
+  private final DbClient dbClient;
 
-  JdbcClientTest(final Vertx vertx) {
-    this.sqlClient = new JdbcClient(
+  LazyDbClientTest(final Vertx vertx) {
+    this.dbClient = new LazyDbClient(
       vertx,
       json(
         field("url", URL)
@@ -32,7 +32,7 @@ class JdbcClientTest {
 
   @BeforeEach
   void beforeEach() {
-    final var db = sqlClient.get();
+    final var db = dbClient.get();
     db.update("create table test(id int, field varchar(255))", async -> {
       when(async.succeeded(),
         () -> log.info("Table `temp` created."),
@@ -53,7 +53,7 @@ class JdbcClientTest {
   @Test
   @DisplayName("should get a sql-client")
   void shouldGetSqlClient() {
-    final var db = sqlClient.get();
+    final var db = dbClient.get();
 
     db.query("select id, field from temp", async ->
       when(async.succeeded(),
@@ -61,6 +61,6 @@ class JdbcClientTest {
         () -> log.error("Failed to retrieve rows.")
       )
     );
-    assertThat(sqlClient.get()).isNotNull();
+    assertThat(dbClient.get()).isNotNull();
   }
 }

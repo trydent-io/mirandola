@@ -1,9 +1,11 @@
 package io.trydent.olimpo;
 
+import io.trydent.olimpo.db.DbClient;
+
 import static io.trydent.olimpo.action.Action.commandAction;
 import static io.trydent.olimpo.apollo.ApolloCommand.addReading;
-import static io.trydent.olimpo.db.DbmsParams.envPostgresql;
-import static io.trydent.olimpo.db.SqlClient.dbmsClient;
+import static io.trydent.olimpo.db.DbParams.envPostgresql;
+import static io.trydent.olimpo.db.DbClient.dbClient;
 import static io.trydent.olimpo.http.HttpExchange.actionSwitch;
 import static io.trydent.olimpo.http.HttpExchange.staticContent;
 import static io.trydent.olimpo.http.HttpRequest.routeSwitch;
@@ -40,7 +42,7 @@ public final class Olimpo {
       vertx -> commandBus(vertx.eventBus(), uuid())
         .let("add-reading",
           addReading(
-            dbmsClient(
+            DbClient.dbClient(
               vertx,
               envPostgresql("DATABASE_URL")
             )
