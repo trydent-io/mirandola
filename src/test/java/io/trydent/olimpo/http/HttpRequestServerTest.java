@@ -35,7 +35,7 @@ class HttpRequestServerTest {
     httpServer.listen(portOrDie(8140));
 
     given()
-      .port(8190)
+      .port(8140)
       .get()
     .then()
       .statusCode(200)
