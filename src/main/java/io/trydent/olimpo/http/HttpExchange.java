@@ -3,7 +3,6 @@ package io.trydent.olimpo.http;
 import io.trydent.olimpo.action.Action;
 import io.trydent.olimpo.type.Type;
 import io.trydent.olimpo.vertx.json.Json;
-import io.trydent.olimpo.vertx.json.JsonBuffer;
 import io.vertx.core.Handler;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.StaticHandler;
@@ -11,6 +10,7 @@ import org.slf4j.Logger;
 
 import static io.trydent.olimpo.http.HttpHeader.Name.ContentType;
 import static io.trydent.olimpo.http.HttpHeader.Value.ApplicationJson;
+import static io.trydent.olimpo.type.When.when;
 import static io.trydent.olimpo.vertx.json.Json.Field.field;
 import static io.trydent.olimpo.vertx.json.Json.json;
 import static io.trydent.olimpo.vertx.json.JsonBuffer.jsonBuffer;
@@ -60,20 +60,15 @@ final class ActionSwitch implements HttpExchange {
     action
       .apply(routing.pathParam("action"), json)
       .future()
-      .setHandler(async ->
-        response(
-          routing,
-          jsonBuffer(
+      .setHandler(async -> when(async.succeeded(),
+        () -> routing
+          .response()
+          .putHeader(ContentType, ApplicationJson)
+          .end(jsonBuffer(
             field("actionId", async.result().get())
-          )
-        )
-      );
+          ).get()),
+        () -> log.error("Async response failed: {}.", async.cause().getMessage())
+      ));
   }
 
-  private void response(RoutingContext routing, JsonBuffer json) {
-    routing
-      .response()
-      .putHeader(ContentType, ApplicationJson)
-      .end(json.get());
-  }
 }
