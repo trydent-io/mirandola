@@ -2,7 +2,6 @@ package io.trydent.olimpo.action;
 
 import io.trydent.olimpo.sys.Id;
 import io.trydent.olimpo.vertx.Delivery;
-import io.trydent.olimpo.vertx.Template;
 import io.trydent.olimpo.vertx.json.Json;
 import io.vertx.core.Promise;
 import io.vertx.core.eventbus.EventBus;
@@ -13,8 +12,8 @@ import java.util.function.BiFunction;
 
 import static io.trydent.olimpo.sys.Id.id;
 import static io.trydent.olimpo.vertx.Delivery.localDelivery;
-import static io.trydent.olimpo.vertx.Template.template;
 import static io.trydent.olimpo.vertx.async.AsyncJsonMessage.$;
+import static java.lang.String.format;
 import static org.slf4j.LoggerFactory.getLogger;
 
 public interface Action extends BiFunction<String, Json, Promise<Id>> {
@@ -22,7 +21,7 @@ public interface Action extends BiFunction<String, Json, Promise<Id>> {
   static Action commandAction(final EventBus bus) {
     return new CommandAction(
       bus,
-      template("%s-command"),
+      "%s-command",
       localDelivery()
     );
   }
@@ -39,10 +38,10 @@ final class CommandAction implements Action {
   private static final Logger log = getLogger(CommandAction.class);
 
   private final EventBus bus;
-  private final Template command;
+  private final String command;
   private final Delivery delivery;
 
-  CommandAction(final EventBus bus, final Template command, final Delivery delivery) {
+  CommandAction(final EventBus bus, final String command, final Delivery delivery) {
     this.bus = bus;
     this.command = command;
     this.delivery = delivery;
@@ -51,7 +50,7 @@ final class CommandAction implements Action {
   @Override
   public final Promise<Id> submit(String name, Json params) {
     final var promise = Promise.<Id>promise();
-    final var commandName = command.apply(name);
+    final var commandName = format(command, name);
     bus.<JsonObject>request(commandName, params.get(), delivery.get(), async -> {
         if (async.succeeded()) {
           promise.complete(id($(async).stringField("id")));
