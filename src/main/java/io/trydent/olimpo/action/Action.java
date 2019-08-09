@@ -5,11 +5,14 @@ import io.trydent.olimpo.vertx.Delivery;
 import io.trydent.olimpo.vertx.json.Json;
 import io.vertx.core.Promise;
 import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.eventbus.Message;
 import io.vertx.core.json.JsonObject;
 import org.slf4j.Logger;
 
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
+import static io.trydent.olimpo.action.Async.*;
 import static io.trydent.olimpo.sys.Id.id;
 import static io.trydent.olimpo.vertx.Delivery.localDelivery;
 import static io.trydent.olimpo.vertx.async.AsyncJsonMessage.$;
@@ -51,6 +54,11 @@ final class CommandAction implements Action {
   public final Promise<Id> submit(String name, Json params) {
     final var promise = Promise.<Id>promise();
     final var commandName = format(command, name);
+    awaitMessage(async -> bus.request("asd", new JsonObject(), async))
+    .future()
+    .map(Message::body)
+    .map(json -> json.getString("id"))
+    .map(Id::id);
     bus.<JsonObject>request(commandName, params.get(), delivery.get(), async -> {
         if (async.succeeded()) {
           promise.complete(id($(async).stringField("id")));
@@ -60,6 +68,23 @@ final class CommandAction implements Action {
         }
       }
     );
+    return promise;
+  }
+}
+
+interface AsyncResult<T> extends Consumer<Promise<T>> {}
+interface AsyncMessage extends Consumer<Promise<Message<JsonObject>>> {}
+
+interface Async {
+  static <T> Promise<T> await(AsyncResult<T> result) {
+    final var promise = Promise.<T>promise();
+    result.accept(promise);
+    return promise;
+  }
+
+  static Promise<Message<JsonObject>> awaitMessage(AsyncMessage message) {
+    final var promise = Promise.<Message<JsonObject>>promise();
+    message.accept(promise);
     return promise;
   }
 }
