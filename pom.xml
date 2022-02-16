@@ -19,7 +19,7 @@
     <log4j.version>2.12.1</log4j.version>
     <slf4j.version>2.0.0-alpha0</slf4j.version>
     <vertx.version>4.0.3</vertx.version>
-    <postgresql.version>42.2.6</postgresql.version>
+    <postgresql.version>42.3.3</postgresql.version>
     <hikari.version>3.3.1</hikari.version>
     <flyway.version>6.0.0-beta2</flyway.version>
 
